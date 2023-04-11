@@ -17,13 +17,7 @@ export class WorkspaceComponent implements OnInit {
       el: document.getElementById('workspace')!,
       model: this.graph,
       interactive: {
-        linkMove: false,
         labelMove: true,
-        arrowheadMove: false,
-        vertexMove: false,
-        vertexAdd: false,
-        vertexRemove: false,
-        useLinkTools: false
      },
       width: '100%',
       height: '100%',
@@ -62,16 +56,16 @@ export class WorkspaceComponent implements OnInit {
 
 
     //toolbox behaviour
-    this.paper.on('element:contextmenu', function (elementView) {
+    this.paper.on('element:mouseenter', function (elementView) {
       elementView.showTools();
     });
 
     //temporarily disable hide and make the event of show as right click on element 
     //it didn't work with previous code mouseenter and mouseleave
 
-    // this.paper.on('element:mouseleave', function(elementView) {
-    //   elementView.hideTools();
-    // });
+    this.paper.on('element:mouseleave', function(elementView) {
+      elementView.hideTools();
+    });
 
     this.paper.on('link:mouseenter', function (elementView) {
       elementView.showTools();
@@ -140,6 +134,7 @@ export class WorkspaceComponent implements OnInit {
       padding: 20,
       rotate: true,
       useModelGeometry: true,
+      
     });
 
     const removeButton = new joint.elementTools.Remove();
