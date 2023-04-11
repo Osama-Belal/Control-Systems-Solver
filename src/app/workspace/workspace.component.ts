@@ -21,7 +21,7 @@ export class WorkspaceComponent implements OnInit {
       gridSize: 1,
       drawGrid: true,
       background: {
-        color: 'rgba(0, 255, 0, 0.3)'
+        color: 'rgba(0, 25, 0, 0.3)'
       },
 
       defaultLink: () => this.createLink(),
