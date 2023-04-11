@@ -64,6 +64,16 @@ export class WorkspaceComponent implements OnInit {
       elementView.hideTools();
     });
 
+    //edit link and node labels when clicked on 
+    this.paper.on('cell:pointerclick', function (elementView){
+        var cell = elementView.model;
+        if (cell instanceof joint.shapes.standard.Link) {
+          console.log(prompt("Enter link label", cell.attr('label/text')));
+        }
+        else if (cell instanceof joint.shapes.standard.Rectangle) {
+          console.log(prompt("Enter node label", cell.attr('label/text')));
+        }
+    });
   }
 
   createNode(label:any) {
