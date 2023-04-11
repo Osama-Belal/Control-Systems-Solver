@@ -207,7 +207,6 @@ export class WorkspaceComponent implements OnInit {
             textAnchor: 'middle',
             yAlignment: 'middle',
             pointerEvents: 'none',
-            
         },
         body: {
             ref: 'label',
@@ -220,7 +219,8 @@ export class WorkspaceComponent implements OnInit {
         },
         
       }
-    });
+    });    
+
     const verticesTool = new joint.linkTools.Vertices();
     const segmentsTool = new joint.linkTools.Segments();
     // const sourceArrowheadTool = new joint.linkTools.SourceArrowhead();
