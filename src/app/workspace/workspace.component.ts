@@ -56,22 +56,11 @@ export class WorkspaceComponent implements OnInit {
 
 
     //toolbox behaviour
-    this.paper.on('element:mouseenter', function (elementView) {
+    this.paper.on('cell:mouseenter', function (elementView) {
       elementView.showTools();
     });
 
-    //temporarily disable hide and make the event of show as right click on element 
-    //it didn't work with previous code mouseenter and mouseleave
-
-    this.paper.on('element:mouseleave', function(elementView) {
-      elementView.hideTools();
-    });
-
-    this.paper.on('link:mouseenter', function (elementView) {
-      elementView.showTools();
-    });
-
-    this.paper.on('link:mouseleave', function (elementView) {
+    this.paper.on('cell:mouseleave', function(elementView) {
       elementView.hideTools();
     });
 
