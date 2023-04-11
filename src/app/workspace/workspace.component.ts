@@ -16,6 +16,15 @@ export class WorkspaceComponent implements OnInit {
     this.paper = new joint.dia.Paper({
       el: document.getElementById('workspace')!,
       model: this.graph,
+      interactive: {
+        linkMove: false,
+        labelMove: true,
+        arrowheadMove: false,
+        vertexMove: false,
+        vertexAdd: false,
+        vertexRemove: false,
+        useLinkTools: false
+     },
       width: '100%',
       height: '100%',
       gridSize: 1,
@@ -83,7 +92,7 @@ export class WorkspaceComponent implements OnInit {
         y: 100,
       },
       size: {
-        width: 200,
+        width: 220,
         height: 50,
       },
       attrs: {
@@ -91,7 +100,7 @@ export class WorkspaceComponent implements OnInit {
           rx: 10,
           ry: 10,
           fill: 'lightblue',
-          stroke: '#333',
+          stroke: '#133056',
         },
         label: {
           text: text,
@@ -109,11 +118,11 @@ export class WorkspaceComponent implements OnInit {
     rect.addPorts([
       {
         group: 'in',
-        attrs: { label: { text: 'in' } }
+        attrs: { label: { text: '' } }
       },
       {
         group: 'out',
-        attrs: { label: { text: 'out' } }
+        attrs: { label: { text: '' } }
       }
     ]);
 
@@ -177,14 +186,41 @@ export class WorkspaceComponent implements OnInit {
   }
 
   createLink() {
-    const link = new joint.shapes.standard.Link({
-      label: {
-        text: 'G(S)',
-        fill: '#333',
-        stroke: '#FFF'
-      },
+  
+    const link = new joint.shapes.standard.Link
+    link.appendLabel({
+      markup: [
+        {
+            tagName: 'circle',
+            selector: 'body'
+        }, 
+        {
+            tagName: 'text',
+            selector: 'label'
+        }
+      ],
+      attrs: {
+        label: {
+            text: "input",
+            fill: '#000000',
+            fontSize: 14,
+            textAnchor: 'middle',
+            yAlignment: 'middle',
+            pointerEvents: 'none',
+            
+        },
+        body: {
+            ref: 'label',
+            fill: '#ffffff',
+            stroke: '#000000',
+            strokeWidth: 1,
+            r: 'calc(s)',
+            cx: 0,
+            cy: 0
+        },
+        
+      }
     });
-
     const verticesTool = new joint.linkTools.Vertices();
     const segmentsTool = new joint.linkTools.Segments();
     // const sourceArrowheadTool = new joint.linkTools.SourceArrowhead();
