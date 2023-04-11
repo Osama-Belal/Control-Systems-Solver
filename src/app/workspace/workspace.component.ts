@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as joint from "jointjs";
 
 @Component({
@@ -6,10 +6,10 @@ import * as joint from "jointjs";
   templateUrl: './workspace.component.html',
   styleUrls: ['./workspace.component.scss']
 })
-export class WorkspaceComponent implements OnInit{
+export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {
     this.graph = new joint.dia.Graph();
@@ -24,18 +24,20 @@ export class WorkspaceComponent implements OnInit{
         color: 'rgba(0, 255, 0, 0.3)'
       },
 
-      defaultLink: () => new joint.shapes.standard.Link(),
+      defaultLink: () => this.createLink(),
+
       linkPinning: false,
 
-      validateConnection: function(cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
+      validateConnection: function (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
         // Prevent linking from input ports
         if (magnetS && magnetS.getAttribute('port-group') === 'in') return false;
         // Prevent linking from output ports to input ports within one element
-        if (cellViewS === cellViewT) return false;
+        // if (cellViewS === cellViewT) return false;
         // Prevent linking to output ports
         return magnetT && magnetT.getAttribute('port-group') === 'in';
       },
-      validateMagnet: function(cellView, magnet) {
+
+      validateMagnet: function (cellView, magnet) {
         // Note that this is the default behaviour. It is shown for reference purposes.
         // Disable linking interaction for magnets marked as passive
         return magnet.getAttribute('magnet') !== 'passive';
@@ -48,36 +50,39 @@ export class WorkspaceComponent implements OnInit{
     const r1 = this.createBlock('K(S + 20) / (S^2 + 5S + 20)');
     const r2 = this.createBlock('K / S (S + 20) (S^2 + 5S + 20)');
     r2.translate(30, 30);
-    const link = this.createLink(r1, r2);
 
 
-    this.paper.on('element:mouseenter', function(elementView) {
+    //toolbox behaviour
+    this.paper.on('element:contextmenu', function (elementView) {
       elementView.showTools();
     });
 
-    this.paper.on('element:mouseleave', function(elementView) {
-      elementView.hideTools();
-    });
+    //temporarily disable hide and make the event of show as right click on element 
+    //it didn't work with previous code mouseenter and mouseleave
 
-    this.paper.on('link:mouseenter', function(elementView) {
+    // this.paper.on('element:mouseleave', function(elementView) {
+    //   elementView.hideTools();
+    // });
+
+    this.paper.on('link:mouseenter', function (elementView) {
       elementView.showTools();
     });
 
-    this.paper.on('link:mouseleave', function(elementView) {
+    this.paper.on('link:mouseleave', function (elementView) {
       elementView.hideTools();
     });
 
   }
 
-  createBlock(text: any){
+  createBlock(text: any) {
     const Inport = this.createPort('In', 'left');
     const Outport = this.createPort('In', 'right');
     const rect = new joint.shapes.standard.Rectangle({
-      position:{
+      position: {
         x: 100,
         y: 100,
       },
-      size:{
+      size: {
         width: 200,
         height: 50,
       },
@@ -104,11 +109,11 @@ export class WorkspaceComponent implements OnInit{
     rect.addPorts([
       {
         group: 'in',
-        attrs: { label: { text: 'in' }}
+        attrs: { label: { text: 'in' } }
       },
       {
         group: 'out',
-        attrs: { label: { text: 'out' }}
+        attrs: { label: { text: 'out' } }
       }
     ]);
 
@@ -121,7 +126,7 @@ export class WorkspaceComponent implements OnInit{
     return rect;
   }
 
-  createToolsView(){
+  createToolsView() {
     const boundaryTool = new joint.elementTools.Boundary({
       padding: 20,
       rotate: true,
@@ -129,18 +134,51 @@ export class WorkspaceComponent implements OnInit{
     });
 
     const removeButton = new joint.elementTools.Remove();
+
+    // var infoButton = new joint.elementTools.Button({
+    //   focusOpacity: 0.5,
+    //   // top-right corner
+    //   x: '100%',
+    //   y: '0%',
+    //   offset: { x: -5, y: -5 },
+    //   action: function(evt) {
+    //       alert('View id: ' + this.id + '\n' + 'Model id: ' );
+    //   },
+    //   markup: [{
+    //       tagName: 'circle',
+    //       selector: 'button',
+    //       attributes: {
+    //           'r': 7,
+    //           'fill': '#001DFF',
+    //           'cursor': 'pointer'
+    //       }
+    //   }, {
+    //       tagName: 'path',
+    //       selector: 'icon',
+    //       attributes: {
+    //           'd': 'M -2 4 2 4 M 0 3 0 0 M -2 -1 1 -1 M -1 -4 1 -4',
+    //           'fill': 'none',
+    //           'stroke': '#FFFFFF',
+    //           'stroke-width': 2,
+    //           'pointer-events': 'none'
+    //       }
+    //   }]
+    // });
+
+
     const toolsview = new joint.dia.ToolsView({
       tools: [
         boundaryTool,
-        removeButton
+        removeButton,
+        // infoButton
       ]
     });
     return toolsview
   }
 
-  createLink(block1 : any, block2 : any){
+  createLink() {
     const link = new joint.shapes.standard.Link({
-      label:{
+      label: {
         text: 'G(S)',
         fill: '#333',
         stroke: '#FFF'
@@ -162,8 +200,6 @@ export class WorkspaceComponent implements OnInit{
       ]
     });
 
-    link.source(block1);
-    link.target(block2);
 
     link.addTo(this.graph);
 
@@ -174,10 +210,10 @@ export class WorkspaceComponent implements OnInit{
     return link
   }
 
-  createPort(text: any, pos: any){
+  createPort(text: any, pos: any) {
     const port = {
       id: 'custom-port-id', // set a custom ID
-      position:{
+      position: {
         name: pos
       },
       label: {
@@ -195,7 +231,7 @@ export class WorkspaceComponent implements OnInit{
           r: 13,
           x: -8,
           y: -8,
-          fill:  '#133056',
+          fill: '#133056',
           stroke: '#e1c019',
           strokeWidth: 3,
         },
