@@ -27,7 +27,7 @@ export class WorkspaceComponent implements OnInit {
         color: 'rgba(0, 25, 0, 0.3)'
       },
 
-      defaultLink: () => this.createLink(),
+      defaultLink: () => this.createLink("default"),
 
       linkPinning: false,
 
@@ -50,8 +50,8 @@ export class WorkspaceComponent implements OnInit {
       markAvailable: true,
     });
 
-    const r1 = this.createBlock('K(S + 20) / (S^2 + 5S + 20)');
-    const r2 = this.createBlock('K / S (S + 20) (S^2 + 5S + 20)');
+    const r1 = this.createNode("x1");
+    const r2 = this.createNode("x2");
     r2.translate(30, 30);
 
 
@@ -77,7 +77,7 @@ export class WorkspaceComponent implements OnInit {
 
   }
 
-  createBlock(text: any) {
+  createNode(label:any) {
     const Inport = this.createPort('In', 'left');
     const Outport = this.createPort('In', 'right');
     const rect = new joint.shapes.standard.Rectangle({
@@ -86,19 +86,21 @@ export class WorkspaceComponent implements OnInit {
         y: 100,
       },
       size: {
-        width: 220,
+        width: 50,
         height: 50,
       },
       attrs: {
         body: {
-          rx: 10,
-          ry: 10,
+          rx: 100,
+          ry: 100,
           fill: 'lightblue',
           stroke: '#133056',
         },
-        label: {
-          text: text,
-          fill: 'black',
+        label:{
+          text: label,
+          fill: '#133056',
+          fontSize: 12,
+          fontFamily: 'sans-serif',
         }
       },
       ports: {
@@ -180,7 +182,7 @@ export class WorkspaceComponent implements OnInit {
     return toolsview
   }
 
-  createLink() {
+  createLink(text: any) {
   
     const link = new joint.shapes.standard.Link
     link.appendLabel({
@@ -192,29 +194,34 @@ export class WorkspaceComponent implements OnInit {
         {
             tagName: 'text',
             selector: 'label'
-        }
+        },
       ],
       attrs: {
         label: {
-            text: "input",
-            fill: '#000000',
+            text: text,
+            fill: '#133056',
             fontSize: 14,
             textAnchor: 'middle',
             yAlignment: 'middle',
-            pointerEvents: 'none',
         },
         body: {
             ref: 'label',
             fill: '#ffffff',
-            stroke: '#000000',
-            strokeWidth: 1,
-            r: 'calc(s)',
+            stroke: '#133056',
+            strokeWidth: 1.5,
+            r: 'calc(s + 6)',
             cx: 0,
             cy: 0
         },
-        
       }
-    });    
+    }); 
+
+    link.attr({
+      line: {
+        stroke: '#133056',
+        strokeWidth: 2,
+      },
+    }); 
 
     const verticesTool = new joint.linkTools.Vertices();
     const segmentsTool = new joint.linkTools.Segments();
@@ -259,12 +266,12 @@ export class WorkspaceComponent implements OnInit {
       attrs: {
         portBody: {
           magnet: true,
-          r: 13,
+          r: 8,
           x: -8,
           y: -8,
           fill: '#133056',
           stroke: '#e1c019',
-          strokeWidth: 3,
+          strokeWidth: 2,
         },
         label: {
           text: text,
