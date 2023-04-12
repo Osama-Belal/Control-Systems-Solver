@@ -4,22 +4,7 @@ div{
   background: #333;
 }
 
-textarea{
-  position: absolute;
-  top: 0;left: 0;
-  z-index: 999999;
-  background: #333;
-  color: red;
-  width: 20px;
-  height: 100px;
-}
-/* port styling */
-.available-magnet {
-  fill: #5DA271;
-}
-
-/* element styling */
-.available-cell rect {
-  stroke-dasharray: 5, 2;
-  background: #333;
+.router{
+  position: fixed;
+  bottom: 1.2em;right: 1.2em;
 }

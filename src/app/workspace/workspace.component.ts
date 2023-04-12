@@ -53,6 +53,12 @@ export class WorkspaceComponent implements OnInit {
       // Enable mark available for cells & magnets
       markAvailable: true,
     });
+    // this.paper.options.defaultConnector = {
+    //   name: 'rounded',
+    //   args: {
+    //     radius: 2000
+    //   }
+    // }
 
     //toolbox behaviour
     this.paper.on('cell:mouseenter', function (elementView) {
@@ -235,6 +241,7 @@ export class WorkspaceComponent implements OnInit {
         }
       }
     });
+    link.connector('curve')
     console.log(link)
 
     const verticesTool = new joint.linkTools.Vertices();
