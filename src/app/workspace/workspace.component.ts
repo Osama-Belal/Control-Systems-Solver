@@ -1,5 +1,6 @@
 import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import * as joint from "jointjs";
+import {toNumbers} from "@angular/compiler-cli/src/version_helpers";
 
 @Component({
   selector: 'app-workspace',
@@ -31,8 +32,7 @@ export class WorkspaceComponent implements OnInit {
         color: '#ffffff'
       },
 
-      defaultLink: () => this.createLink("default"),
-
+      defaultLink: () => this.createLink("G(S)"),
       linkPinning: false,
 
       validateConnection: function (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
@@ -54,16 +54,6 @@ export class WorkspaceComponent implements OnInit {
       markAvailable: true,
     });
 
-    const r1 = this.createNode("x1");
-    const r2 = this.createNode("x2");
-    r2.translate(30, 30);
-    // const link = this.createLink(r1, r2);
-
-
-    this.paper.on('element:mouseenter', function(elementView) {
-      elementView.showTools();
-    });
-
     //toolbox behaviour
     this.paper.on('cell:mouseenter', function (elementView) {
       elementView.showTools();
@@ -74,16 +64,30 @@ export class WorkspaceComponent implements OnInit {
     });
 
     //edit link and node labels when clicked on
-    this.paper.on('cell:pointerclick', function (elementView ){
-        var cell = elementView.model;
+    this.paper.on('cell:pointerdblclick', (elementView, e) =>{
+        const cell = elementView.model;
+
+        // const textarea = document.getElementById("text")!;
+        // this.renderer.setStyle(textarea, 'top', e.clientY+'px')
+        // this.renderer.setStyle(textarea, 'left', e.clientX+'px')
+        // textarea.style.display = 'block'
+        // textarea.textContent = 'labels/0/attrs/text/text';
+        // console.log(textarea.textContent)
+
         if (cell instanceof joint.shapes.standard.Link) {
           cell.prop('labels/0/attrs/text/text', prompt("Enter link label", cell.prop('labels/0/attrs/text/text')));
         }
         else if (cell instanceof joint.shapes.standard.Rectangle) {
-          //get the value of input from side-bar component and set it to the label
           cell.prop('attrs/label/text',  prompt("Enter node label", cell.prop('attrs/label/text')));
         }
     });
+
+    // static on initialization graph
+    const node_1 = this.createNode('R(S)');
+    const node_2 = this.createNode('C(S)');
+    const link = this.createLink('G(S)')
+    link.source(node_1)
+    link.target(node_2)
   }
 
   createNode(label:any) {
@@ -91,12 +95,12 @@ export class WorkspaceComponent implements OnInit {
     const Outport = this.createPort('In', 'right');
     const rect = new joint.shapes.standard.Rectangle({
       position: {
-        x: 100,
-        y: 100,
+        x: Math.random() * window.innerWidth / 2,
+        y: Math.random() * window.innerHeight / 2,
       },
       size: {
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
       },
       attrs: {
         body: {
@@ -108,7 +112,7 @@ export class WorkspaceComponent implements OnInit {
         label:{
           text: label,
           fill: '#133056',
-          fontSize: 12,
+          fontSize: 14,
           fontFamily: 'sans-serif',
         }
       },
@@ -142,13 +146,12 @@ export class WorkspaceComponent implements OnInit {
 
   createToolsView() {
     const boundaryTool = new joint.elementTools.Boundary({
-      padding: 20,
+      padding: 10,
       rotate: true,
       useModelGeometry: true,
-
     });
 
-    const removeButton = new joint.elementTools.Remove();
+    const removeButton = new joint.elementTools.Remove({x: '50%'});
 
     // var infoButton = new joint.elementTools.Button({
     //   focusOpacity: 0.5,
@@ -216,19 +219,19 @@ export class WorkspaceComponent implements OnInit {
       attrs: {
         text: {
             text: text,
-            fill: '#133056',
+            fill: '#642727',
             fontSize: 14,
             textAnchor: 'middle',
             yAlignment: 'middle',
         },
-        rect: {
-            fill: '#FFFFFF',
+        body: {
+            // ref: 'label',
+            fill: '#ff8989',
             stroke: '#133056',
             strokeWidth: 2,
+            r: 21,
             refWidth: '120%',
             refHeight: '120%',
-            refX: '-10%',
-            refY: '-10%',
         }
       }
     });
@@ -248,7 +251,6 @@ export class WorkspaceComponent implements OnInit {
         boundaryTool, removeButton
       ]
     });
-
 
     link.addTo(this.graph);
 
@@ -294,5 +296,9 @@ export class WorkspaceComponent implements OnInit {
       }]
     };
     return port;
+  }
+
+  clearGraph(){
+    this.graph.clear();
   }
 }

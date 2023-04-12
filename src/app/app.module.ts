@@ -4,20 +4,28 @@ import {MatIconModule} from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatButtonModule} from "@angular/material/button";
+import { RouthComponent } from './routh/routh.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     WorkspaceComponent,
-    NavBarComponent
+    NavBarComponent,
+    RouthComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

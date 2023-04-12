@@ -1,7 +1,2 @@
-<!-- //input box to enter the node name -->
-<!-- <input type="text" #nodeLabel placeholder="enter node label" >
-<input type="text" #linkLabel placeholder="enter link label" > -->
-
-<div id="workspace" (auxclick)="createNode('R(s)')"></div>d
-
-
+<div id="workspace"></div>
+<app-nav-bar (node)="createNode($event)" (clear)="clearGraph()"></app-nav-bar>

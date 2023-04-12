@@ -6,10 +6,20 @@
   </a>
 
   <menu class="items-wrapper">
-    <i class="menu-item"><mat-icon>settings</mat-icon></i>
-    <i class="menu-item"><mat-icon>add</mat-icon></i>
-    <i class="menu-item"><mat-icon>remove</mat-icon></i>
-    <i class="menu-item"><mat-icon>clear</mat-icon></i>
+    <i class="menu-item" (click)="submit()" matTooltip="Calculate graph" matTooltipPosition="below">
+      <mat-icon>done</mat-icon>
+    </i>
+
+    <i class="menu-item" (click)="addNode()" matTooltip="Create New Node" matTooltipPosition="left">
+      <mat-icon>add</mat-icon>
+    </i>
+    <i class="menu-item" (click)="clearGraph()" matTooltip="Clear the graph" matTooltipPosition="left">
+      <mat-icon>delete</mat-icon>
+    </i>
+
+    <i class="menu-item" (click)="clearGraph()" matTooltip="Clear the graph" matTooltipPosition="left">
+      <mat-icon>settings</mat-icon>
+    </i>
   </menu>
 
 </div>
