@@ -12,7 +12,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
   declarations: [
     AppComponent,
     WorkspaceComponent,
-    NavBarComponent
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,
