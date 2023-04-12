@@ -21,17 +21,17 @@ export class WorkspaceComponent implements OnInit{
       gridSize: 1,
       drawGrid: true,
       background: {
-        color: 'rgba(0, 255, 0, 0.3)'
+        color: '#AAA'
       },
 
-      defaultLink: () => new joint.shapes.standard.Link(),
+      defaultLink: () => this.createLink(),
       linkPinning: false,
 
       validateConnection: function(cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
         // Prevent linking from input ports
         if (magnetS && magnetS.getAttribute('port-group') === 'in') return false;
         // Prevent linking from output ports to input ports within one element
-        if (cellViewS === cellViewT) return false;
+        // if (cellViewS === cellViewT) return false;
         // Prevent linking to output ports
         return magnetT && magnetT.getAttribute('port-group') === 'in';
       },
@@ -48,7 +48,9 @@ export class WorkspaceComponent implements OnInit{
     const r1 = this.createBlock('K(S + 20) / (S^2 + 5S + 20)');
     const r2 = this.createBlock('K / S (S + 20) (S^2 + 5S + 20)');
     r2.translate(30, 30);
-    const link = this.createLink(r1, r2);
+    const link = this.createLink();
+    link.source(r1);
+    link.target(r2);
 
 
     this.paper.on('element:mouseenter', function(elementView) {
@@ -127,7 +129,6 @@ export class WorkspaceComponent implements OnInit{
       rotate: true,
       useModelGeometry: true,
     });
-
     const removeButton = new joint.elementTools.Remove();
     const toolsview = new joint.dia.ToolsView({
       tools: [
@@ -138,7 +139,7 @@ export class WorkspaceComponent implements OnInit{
     return toolsview
   }
 
-  createLink(block1 : any, block2 : any){
+  createLink(){
     const link = new joint.shapes.standard.Link({
       label:{
         text: 'G(S)',
@@ -162,8 +163,8 @@ export class WorkspaceComponent implements OnInit{
       ]
     });
 
-    link.source(block1);
-    link.target(block2);
+    // link.source(block1);
+    // link.target(block2);
 
     link.addTo(this.graph);
 
