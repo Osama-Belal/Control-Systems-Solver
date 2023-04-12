@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import * as joint from "jointjs";
 
 @Component({
@@ -6,25 +6,29 @@ import * as joint from "jointjs";
   templateUrl: './workspace.component.html',
   styleUrls: ['./workspace.component.scss']
 })
-export class WorkspaceComponent implements OnInit{
+export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
+
     this.graph = new joint.dia.Graph();
     this.paper = new joint.dia.Paper({
       el: document.getElementById('workspace')!,
       model: this.graph,
       interactive: {
+        linkMove: true,
         labelMove: true,
-     },
+        vertexRemove: true,
+        useLinkTools: true
+      },
       width: '100%',
       height: '100%',
       gridSize: 1,
       drawGrid: true,
       background: {
-        color: 'rgba(0, 25, 0, 0.3)'
+        color: '#ffffff'
       },
 
       defaultLink: () => this.createLink("default"),
@@ -70,15 +74,14 @@ export class WorkspaceComponent implements OnInit{
     });
 
     //edit link and node labels when clicked on
-    this.paper.on('cell:pointerdblclick', (elementView) =>{
-        const cell = elementView.model;
-        const textarea = this.renderer.createElement('textarea');
-
+    this.paper.on('cell:pointerclick', function (elementView ){
+        var cell = elementView.model;
         if (cell instanceof joint.shapes.standard.Link) {
-          console.log(prompt("Enter link label", cell.attr('label/text')));
+          cell.prop('labels/0/attrs/text/text', prompt("Enter link label", cell.prop('labels/0/attrs/text/text')));
         }
         else if (cell instanceof joint.shapes.standard.Rectangle) {
-          console.log(prompt("Enter node label", cell.attr('label/text')));
+          //get the value of input from side-bar component and set it to the label
+          cell.prop('attrs/label/text',  prompt("Enter node label", cell.prop('attrs/label/text')));
         }
     });
   }
@@ -99,7 +102,7 @@ export class WorkspaceComponent implements OnInit{
         body: {
           rx: 100,
           ry: 100,
-          fill: 'lightblue',
+          fill: '#97DEFF',
           stroke: '#133056',
         },
         label:{
@@ -190,7 +193,15 @@ export class WorkspaceComponent implements OnInit{
 
   createLink(text: any) {
 
-    const link = new joint.shapes.standard.Link
+    const link = new joint.shapes.standard.Link({
+      attrs: {
+        line: {
+          stroke: '#133056',
+          strokeWidth: 2,
+        }
+      }
+    });
+
     link.appendLabel({
       markup: [
         {
@@ -203,31 +214,25 @@ export class WorkspaceComponent implements OnInit{
         },
       ],
       attrs: {
-        label: {
+        text: {
             text: text,
             fill: '#133056',
             fontSize: 14,
             textAnchor: 'middle',
             yAlignment: 'middle',
         },
-        body: {
-            ref: 'label',
-            fill: '#ffffff',
+        rect: {
+            fill: '#FFFFFF',
             stroke: '#133056',
-            strokeWidth: 1.5,
-            r: 'calc(s + 6)',
-            cx: 0,
-            cy: 0
-        },
+            strokeWidth: 2,
+            refWidth: '120%',
+            refHeight: '120%',
+            refX: '-10%',
+            refY: '-10%',
+        }
       }
     });
-
-    link.attr({
-      line: {
-        stroke: '#133056',
-        strokeWidth: 2,
-      },
-    });
+    console.log(link)
 
     const verticesTool = new joint.linkTools.Vertices();
     const segmentsTool = new joint.linkTools.Segments();
@@ -244,8 +249,6 @@ export class WorkspaceComponent implements OnInit{
       ]
     });
 
-    // link.source(block1);
-    // link.target(block2);
 
     link.addTo(this.graph);
 
