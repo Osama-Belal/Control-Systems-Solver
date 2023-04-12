@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import * as joint from "jointjs";
 
 @Component({
@@ -9,7 +9,7 @@ import * as joint from "jointjs";
 export class WorkspaceComponent implements OnInit{
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  constructor(private elementRef: ElementRef) {}
+  constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
     this.graph = new joint.dia.Graph();
@@ -70,8 +70,10 @@ export class WorkspaceComponent implements OnInit{
     });
 
     //edit link and node labels when clicked on
-    this.paper.on('cell:pointerclick', function (elementView){
-        var cell = elementView.model;
+    this.paper.on('cell:pointerdblclick', (elementView) =>{
+        const cell = elementView.model;
+        const textarea = this.renderer.createElement('textarea');
+
         if (cell instanceof joint.shapes.standard.Link) {
           console.log(prompt("Enter link label", cell.attr('label/text')));
         }
