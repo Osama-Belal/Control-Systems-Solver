@@ -1,9 +1,19 @@
-
-
-
 <app-nav-bar></app-nav-bar>
 <button mat-fab routerLink="/signal-flow-graph" matTooltip="Signal flow graph workspace"
         matTooltipPosition="left" [color]="'primary'" class="router">
   <mat-icon>navigate_before</mat-icon>
 </button>
+<form>
+  <label for="degree">Enter the highest degree of the c/cs equation </label>
+  <input  type="number" id="degree" name="degree" min="1" max="100" required >
+  <button  id="construct" type="submit">construct</button>
+  <div class="polynomial" id="polynomial"> the c/cs equation formula is: </div><br>
+  <!-- <div [ngIf]="construct">
+    <div *ngFor="let i = degree">
+      <label for="c{{i}}">c{{i}}: </label>
+    </div>
+  </div> -->
+</form>
+
+
 

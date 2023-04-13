@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./routh.component.scss']
 })
 export class RouthComponent {
+  degree?: number ;
+  equation? : string ;
+  construct = false;
 
+  allowConstruction(){
+    this.construct = true;
+  }
 }

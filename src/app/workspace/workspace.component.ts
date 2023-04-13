@@ -1,6 +1,8 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import * as joint from "jointjs";
-import {toNumbers} from "@angular/compiler-cli/src/version_helpers";
+//http
+import { HttpClient } from "@angular/common/http";
+import { toNumbers } from "@angular/compiler-cli/src/version_helpers";
 
 @Component({
   selector: 'app-workspace',
@@ -10,7 +12,8 @@ import {toNumbers} from "@angular/compiler-cli/src/version_helpers";
 export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  constructor(private renderer: Renderer2) {}
+  //http instance
+  constructor(private renderer: Renderer2, private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -65,27 +68,27 @@ export class WorkspaceComponent implements OnInit {
       elementView.showTools();
     });
 
-    this.paper.on('cell:mouseleave', function(elementView) {
+    this.paper.on('cell:mouseleave', function (elementView) {
       elementView.hideTools();
     });
 
     //edit link and node labels when clicked on
-    this.paper.on('cell:pointerdblclick', (elementView, e) =>{
-        const cell = elementView.model;
+    this.paper.on('cell:pointerdblclick', (elementView, e) => {
+      const cell = elementView.model;
 
-        // const textarea = document.getElementById("text")!;
-        // this.renderer.setStyle(textarea, 'top', e.clientY+'px')
-        // this.renderer.setStyle(textarea, 'left', e.clientX+'px')
-        // textarea.style.display = 'block'
-        // textarea.textContent = 'labels/0/attrs/text/text';
-        // console.log(textarea.textContent)
+      // const textarea = document.getElementById("text")!;
+      // this.renderer.setStyle(textarea, 'top', e.clientY+'px')
+      // this.renderer.setStyle(textarea, 'left', e.clientX+'px')
+      // textarea.style.display = 'block'
+      // textarea.textContent = 'labels/0/attrs/text/text';
+      // console.log(textarea.textContent)
 
-        if (cell instanceof joint.shapes.standard.Link) {
-          cell.prop('labels/0/attrs/text/text', prompt("Enter link label", cell.prop('labels/0/attrs/text/text')));
-        }
-        else if (cell instanceof joint.shapes.standard.Rectangle) {
-          cell.prop('attrs/label/text',  prompt("Enter node label", cell.prop('attrs/label/text')));
-        }
+      if (cell instanceof joint.shapes.standard.Link) {
+        cell.prop('labels/0/attrs/text/text', prompt("Enter link label", cell.prop('labels/0/attrs/text/text')));
+      }
+      else if (cell instanceof joint.shapes.standard.Rectangle) {
+        cell.prop('attrs/label/text', prompt("Enter node label", cell.prop('attrs/label/text')));
+      }
     });
 
     // static on initialization graph
@@ -96,7 +99,7 @@ export class WorkspaceComponent implements OnInit {
     link.target(node_2)
   }
 
-  createNode(label:any) {
+  createNode(label: any) {
     const Inport = this.createPort('In', 'left');
     const Outport = this.createPort('In', 'right');
     const rect = new joint.shapes.standard.Rectangle({
@@ -115,7 +118,7 @@ export class WorkspaceComponent implements OnInit {
           fill: '#97DEFF',
           stroke: '#133056',
         },
-        label:{
+        label: {
           text: label,
           fill: '#133056',
           fontSize: 14,
@@ -157,7 +160,7 @@ export class WorkspaceComponent implements OnInit {
       useModelGeometry: true,
     });
 
-    const removeButton = new joint.elementTools.Remove({x: '50%'});
+    const removeButton = new joint.elementTools.Remove({ x: '50%' });
 
     // var infoButton = new joint.elementTools.Button({
     //   focusOpacity: 0.5,
@@ -214,30 +217,30 @@ export class WorkspaceComponent implements OnInit {
     link.appendLabel({
       markup: [
         {
-            tagName: 'circle',
-            selector: 'body'
+          tagName: 'circle',
+          selector: 'body'
         },
         {
-            tagName: 'text',
-            selector: 'label'
+          tagName: 'text',
+          selector: 'label'
         },
       ],
       attrs: {
         text: {
-            text: text,
-            fill: '#642727',
-            fontSize: 14,
-            textAnchor: 'middle',
-            yAlignment: 'middle',
+          text: text,
+          fill: '#642727',
+          fontSize: 14,
+          textAnchor: 'middle',
+          yAlignment: 'middle',
         },
         body: {
-            // ref: 'label',
-            fill: '#ff8989',
-            stroke: '#133056',
-            strokeWidth: 2,
-            r: 21,
-            refWidth: '120%',
-            refHeight: '120%',
+          fill: '#ff8989',
+          stroke: '#133056',
+          strokeWidth: 2,
+          //make the radius dynamic
+          r: 21,
+          refWidth: '120%',
+          refHeight: '120%',
         }
       }
     });
@@ -267,6 +270,7 @@ export class WorkspaceComponent implements OnInit {
 
     return link
   }
+
 
   createPort(text: any, pos: any) {
     const port = {
@@ -305,7 +309,59 @@ export class WorkspaceComponent implements OnInit {
     return port;
   }
 
-  clearGraph(){
+
+  clearGraph() {
     this.graph.clear();
   }
+  
+
+  createAdjacencyMatrix() {
+    //number of nodes
+    let n = this.graph.getElements().length;
+    let weightedGraph: any[][] = [];
+
+    //just initialize the adjacency matrix
+    for (let i = 0; i < n; i++) {
+      weightedGraph[i] = [];
+      for (let j = 0; j < n; j++) {
+        weightedGraph[i][j] = 0;
+      }
+    }
+    this.graph.getLinks().forEach((link) => {
+      let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
+      let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
+      //push the link label at the index of the source and target
+      console.log(sourceLabel, targetLabel);
+      console.log(link.prop('labels/0/attrs/text/text'));
+      weightedGraph[sourceLabel][targetLabel] = link.prop('labels/0/attrs/text/text');
+
+    });
+    //print the adjacency matrix in formatted way
+    let output = '[';
+    for (let i = 0; i < weightedGraph.length; i++) {
+      output += '[' + weightedGraph[i].join(',') + ']';
+      if (i < weightedGraph.length - 1) {
+        output += '\n ';
+      }
+    }
+    output += ']';
+    console.log(output);
+    console.log(weightedGraph);
+
+    this.sendToBackend(weightedGraph);
+  }
+
+  sendToBackend(weightedGraph: any[][]) {
+    //send the adjacency matrix to the backend
+    console.log(weightedGraph);
+    this.http.post('http://localhost:8080/signal-flow-graph', weightedGraph).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 }
+
