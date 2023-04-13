@@ -18,5 +18,6 @@ export class RouthComponent {
     while(i){
       this.polynomial.push(i--);
     }
+    this.polynomial.push(0);
   }
 }
