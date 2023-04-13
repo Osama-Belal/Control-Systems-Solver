@@ -7,10 +7,16 @@ import { Component } from '@angular/core';
 })
 export class RouthComponent {
   degree?: number ;
+  polynomial: number[] = [];
   equation? : string ;
   construct = false;
 
   allowConstruction(){
+    this.polynomial = [];
     this.construct = true;
+    let i = this.degree;
+    while(i){
+      this.polynomial.push(i--);
+    }
   }
 }

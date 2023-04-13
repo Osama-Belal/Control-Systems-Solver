@@ -5,14 +5,17 @@
 </button>
 <form>
   <label for="degree">Enter the highest degree of the c/cs equation </label>
-  <input  type="number" id="degree" name="degree" min="1" max="100" required >
-  <button  id="construct" type="submit">construct</button>
-  <div class="polynomial" id="polynomial"> the c/cs equation formula is: </div><br>
-  <!-- <div [ngIf]="construct">
-    <div *ngFor="let i = degree">
-      <label for="c{{i}}">c{{i}}: </label>
+  <input [(ngModel)]="degree" type="number" id="degree" name="degree" min="1" max="100" required >
+  <button (click)="allowConstruction()" id="construct" type="submit">construct</button>
+  <div class="polynomial" id="polynomial"> the c/cs equation formula is: 
+    <div *ngIf="construct">
+      <div class="char-eq" *ngFor="let i of polynomial">
+        <input  type="text" id="coefficient" name="coefficient" min="-100" max="100" required>
+        <label for="coefficient">s<sup>{{i}}</sup></label>
+
+      </div>
     </div>
-  </div> -->
+  </div>
 </form>
 
 
