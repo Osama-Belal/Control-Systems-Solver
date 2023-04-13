@@ -12,7 +12,7 @@ import { toNumbers } from "@angular/compiler-cli/src/version_helpers";
 export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  //http instance
+  transferFun: string = "";
   constructor(private renderer: Renderer2, private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -313,7 +313,7 @@ export class WorkspaceComponent implements OnInit {
   clearGraph() {
     this.graph.clear();
   }
-  
+
 
   createAdjacencyMatrix() {
     //number of nodes

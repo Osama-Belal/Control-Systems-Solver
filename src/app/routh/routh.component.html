@@ -6,7 +6,7 @@
 <form>
   <label for="degree" >Enter Degree of the C/CS Equation </label>
   <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100" >
-  <button (click)="allowConstruction()" id="construct" type="submit">Go</button>
+  <button (click)="allowConstruction()" id="construct" type="submit" matTooltip="construct characteristic eq">Go</button>
   <div class="polynomial" id="polynomial"><p class="inner-text"> The C/CS Equation Formula Is</p>
     <div *ngIf="construct">
       <div class="char-eq" *ngFor="let i of polynomial">
