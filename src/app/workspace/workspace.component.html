@@ -4,13 +4,12 @@
   <p> {{transferFun}} </p>
 </div>
 <div id="workspace">
-  
+
 </div>
 
-<app-nav-bar (node)="createNode($event)" (clear)="clearGraph()" (result)="createAdjacencyMatrix()" ></app-nav-bar>
-<button mat-fab routerLink="/routh-herwitz" matTooltip="Routh-Hurwitz Table"
-        matTooltipPosition="left" [color]="'primary'" class="router">
-  <mat-icon>navigate_next</mat-icon>
-</button>
-
-
+<app-nav-bar (node)="createNode($event)" (clear)="clearGraph()" (result)="createAdjacencyMatrix()"
+             [navigation_dir]="'skip_next'" [router_link]="'/routh-herwitz'"
+             [tool_tip]="'Routh-Hurwitz Table'" [comp]="'Graph'"
+             [op1]="'zoom_in'" [op2]="'zoom_out'"
+             (opt1)="zoom('+')" (opt2)="zoom('-')"
+             [op1_tip]="'Zoom in the graph'" [op2_tip]="'Zoom out the graph'"></app-nav-bar>

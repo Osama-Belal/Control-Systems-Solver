@@ -20,4 +20,8 @@ export class RouthComponent {
     }
     this.polynomial.push(0);
   }
+
+  clearTable() {
+    this.polynomial = []
+  }
 }

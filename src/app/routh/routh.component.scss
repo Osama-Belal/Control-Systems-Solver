@@ -1,22 +1,11 @@
-.router{
-  position: fixed;
-  bottom: 1.2em;right: 1.2em;
-}
-
-body {
-  font-family: sans-serif !important;
-  background-color: #f1f1f1;
-}
-
-
 form {
-  margin-top: 80px !important;
+  font-family: 'Chivo Mono', monospace !important;
   width: 85%;
-  margin: 50px auto;
+  margin: 5% auto;
   background-color: #fff;
   padding: 20px;
   border-radius: 9px;
-  box-shadow: 0px 0px 10px #aaa; 
+  border: 1px solid #AAA
 }
 
 label {
@@ -42,46 +31,54 @@ input[type="number"] {
   outline: none;
 }
 
-#construct {
-  background-color: #673ab7;
-  color: #fff;
+hr{
+  width: 80%;height: 1px;
+  background: #CCC;
   border: none;
-  border-radius: 9px;
-  padding: 10px 15px;
-  font-size: larger;
-  cursor: pointer;  
-}
-
-#construct:hover {
-  background-color: #5821b7;
 }
 
 .polynomial {
-  margin: 50px auto;
+  margin: 2% auto;
   background-color: #fff;
   padding: 20px;
-  border-radius: 9px;
-  box-shadow: 0px 0px 10px #aaa;
   text-align: center;
   max-width: 95%;
+  max-height: 200px;
+  overflow: auto;
   overflow-wrap: break-word;
   font-size: larger;
   color: #5c5c5c;
 }
 
 .inner-text{
-  margin-top: 20px;
   display: inline-block;
-  line-break: none;
+  position: relative;
+  line-break: unset;
   font-size: larger;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
+}
+
+.inner-text:after{
+  content: '';
+  position: absolute;
+  top: calc(100% + 10px);
+  left: calc(50% - 30px);
+  width: 60px;
+  height: 2px;
+  background: red;
+  transition: .2s ease-in-out;
+}
+
+.inner-text:hover:after{
+  transform: scaleX(1.6);
+  transform-origin: center;
 }
 
 .char-eq{
   margin-top: 20px;
   display: inline-block;
-  line-break: none;
+  line-break: unset;
 }
 
 .char-eq label{
@@ -93,35 +90,25 @@ input[type="number"] {
   text-align: right;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .char-eq input {
-  width: 30px;
+  width: 50px;
   display: inline-block;
   font-size: large;
-  margin-top: 0px;
+  margin-top: 0;
+  margin-right: 0;
   padding: 10px;
   color: #5c5c5c;
-  margin-right: 0px;
   border-radius: 7px;
   border: 1px solid #ccc;
   outline: none;
 }
 
-.char-eq input:focus {
+.char-eq input:is(:focus, :hover) {
   border: 1px solid #673ab7;
 }
-
-// #calculate{
-//   background-color: #673ab7;
-//   color: #fff;
-//   border: none;
-//   border-radius: 5px;
-//   padding: 8px 15px;
-//   font-size: larger;
-//   cursor: pointer;
-//   letter-spacing: 0.5px;
-//   margin-top: 20px;
-// }
-
-// #calculate:hover {
-//   background-color: #5821b7;
-// }

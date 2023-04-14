@@ -1,22 +1,30 @@
-<app-nav-bar></app-nav-bar>
-<button mat-fab routerLink="/signal-flow-graph" matTooltip="Signal flow graph workspace"
-        matTooltipPosition="left" [color]="'primary'" class="router">
-  <mat-icon>navigate_before</mat-icon>
-</button>
+<app-nav-bar [navigation_dir]="'skip_previous'" [router_link]="'/signal-flow-graph'"
+             [tool_tip]="'Signal Flow Graph Workspace'" [comp]="'Table'"
+             [op1]="'delete'" [op2]="'delete'"
+             (opt1)="clearTable()" (opt2)="clearTable()"
+             [op1_tip]="'Clear the Table'" [op2_tip]="'Zoom out the graph'"></app-nav-bar>
+
 <form>
   <label for="degree" >Enter Degree of the C/CS Equation </label>
   <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100" >
-  <button (click)="allowConstruction()" id="construct" type="submit" matTooltip="construct characteristic eq">Go</button>
-  <div class="polynomial" id="polynomial"><p class="inner-text"> The C/CS Equation Formula Is</p>
+  <button mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct"
+          type="submit" matTooltip="construct characteristic eq">
+    <mat-icon>done</mat-icon>
+  </button>
+
+  <div class="polynomial" id="polynomial">
+    <p class="inner-text"> The C/CS Equation Formula Is</p>
     <div *ngIf="construct">
       <div class="char-eq" *ngFor="let i of polynomial">
-        <input type="text" id="coefficient" name="coefficient" min="-100" max="100" required>
-        <label for="coefficient">s<sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
+        <input type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
+        <label for="coefficient">S <sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
       </div>
       <!-- <button id="calculate" type="submit"></button> -->
     </div>
   </div>
+  <hr>
   <div class="polynomial"><p class="inner-text">Routh Table</p></div>
+  <hr>
   <div class="polynomial"><p class="inner-text">Stability</p></div>
 </form>
 

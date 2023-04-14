@@ -6,20 +6,26 @@
   </a>
 
   <menu class="items-wrapper">
-    <i class="menu-item" (click)="submit()" matTooltip="Calculate graph" matTooltipPosition="below">
+    <i class="menu-item" (click)="submit()" matTooltip="Calculate the {{comp}}" matTooltipPosition="below">
       <mat-icon>done</mat-icon>
     </i>
 
-    <i class="menu-item" (click)="addNode()" matTooltip="Create New Node" matTooltipPosition="left">
+    <i class="menu-item" (click)="add()" matTooltip="Create New Node" matTooltipPosition="left">
       <mat-icon>add</mat-icon>
     </i>
-    <i class="menu-item" (click)="clearGraph()" matTooltip="Clear the graph" matTooltipPosition="left">
-      <mat-icon>delete</mat-icon>
+    <i class="menu-item" (click)="option_1()" matTooltip="{{op1_tip}}" matTooltipPosition="left">
+      <mat-icon>{{op1}}</mat-icon>
     </i>
 
-    <i class="menu-item" (click)="clearGraph()" matTooltip="Clear the graph" matTooltipPosition="left">
-      <mat-icon>settings</mat-icon>
+    <i class="menu-item" (click)="option_2()" matTooltip="{{op2_tip}}" matTooltipPosition="left">
+      <mat-icon>{{op2}}</mat-icon>
     </i>
   </menu>
 
 </div>
+
+
+<button mat-fab routerLink="{{router_link}}" matTooltip="{{tool_tip}}"
+        matTooltipPosition="left" [color]="'primary'" class="router">
+  <mat-icon>{{navigation_dir}}</mat-icon>
+</button>

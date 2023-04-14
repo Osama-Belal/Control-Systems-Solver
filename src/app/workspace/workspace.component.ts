@@ -363,5 +363,10 @@ export class WorkspaceComponent implements OnInit {
       }
     );
   }
+
+  zoom(type: any){
+    type == '+' ? this.paper.scale(this.paper.scale().sx + 0.1, this.paper.scale().sy + 0.1):
+                  this.paper.scale(this.paper.scale().sx - 0.1, this.paper.scale().sy - 0.1);
+  }
 }
 

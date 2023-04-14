@@ -122,3 +122,8 @@
 .circular-menu.active .menu-item:nth-child(4) {
   transform: translate3d(-7.6em,-1.1em,0);
 }
+
+.router{
+  position: fixed;
+  bottom: 1.2em;right: 1.2em;
+}
