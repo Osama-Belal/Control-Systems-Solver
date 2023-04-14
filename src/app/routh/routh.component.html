@@ -12,21 +12,65 @@
     <mat-icon>done</mat-icon>
   </button>
 
-  <div class="polynomial" id="polynomial">
-    <p class="inner-text"> The C/CS Equation Formula Is</p>
-    <div *ngIf="construct">
-      <div class="char-eq" *ngFor="let i of polynomial">
-        <input type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
-        <label for="coefficient">S <sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
+  <mat-accordion class="polynomial">
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>The C/CS Equation Formula</mat-panel-title>
+        <mat-panel-description>
+          Write down the coefficients of your equation
+          <mat-icon>account_circle</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="polynomial" id="polynomial">
+        <div *ngIf="construct">
+          <div class="char-eq" *ngFor="let i of polynomial">
+            <input type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
+            <label for="coefficient">S <sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
+          </div>
+        </div>
       </div>
-      <!-- <button id="calculate" type="submit"></button> -->
-    </div>
-  </div>
-  <hr>
-  <div class="polynomial"><p class="inner-text">Routh Table</p></div>
-  <hr>
-  <div class="polynomial"><p class="inner-text">Stability</p></div>
+
+      <mat-action-row>
+        <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Routh Table Result</mat-panel-title>
+        <mat-panel-description>
+          Here's the final routh-hurwitz table of this equation
+          <mat-icon>account_circle</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <!--conent-->
+
+      <mat-action-row>
+        <button mat-raised-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Stability Test</mat-panel-title>
+        <mat-panel-description>
+          Check your transfer function stability
+          <mat-icon>account_circle</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <!--conent-->
+
+      <mat-action-row>
+        <button mat-raised-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+  </mat-accordion>
 </form>
-
-
-

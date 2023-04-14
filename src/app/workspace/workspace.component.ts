@@ -1,8 +1,9 @@
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import * as joint from "jointjs";
-//http
 import { HttpClient } from "@angular/common/http";
 import { toNumbers } from "@angular/compiler-cli/src/version_helpers";
+import {SignalGraphService} from "../Service/signal-graph.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-workspace',
@@ -12,8 +13,8 @@ import { toNumbers } from "@angular/compiler-cli/src/version_helpers";
 export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  transferFun: string = "";
-  constructor(private renderer: Renderer2, private http: HttpClient) { }
+  transferFun!: Observable<Object>;
+  constructor(private renderer: Renderer2, private http: HttpClient, public SignalService: SignalGraphService) { }
 
   ngOnInit(): void {
 
@@ -271,7 +272,6 @@ export class WorkspaceComponent implements OnInit {
     return link
   }
 
-
   createPort(text: any, pos: any) {
     const port = {
       id: 'custom-port-id', // set a custom ID
@@ -336,6 +336,8 @@ export class WorkspaceComponent implements OnInit {
       weightedGraph[sourceLabel][targetLabel] = link.prop('labels/0/attrs/text/text');
 
     });
+
+
     //print the adjacency matrix in formatted way
     let output = '[';
     for (let i = 0; i < weightedGraph.length; i++) {
@@ -348,20 +350,7 @@ export class WorkspaceComponent implements OnInit {
     console.log(output);
     console.log(weightedGraph);
 
-    this.sendToBackend(weightedGraph);
-  }
-
-  sendToBackend(weightedGraph: any[][]) {
-    //send the adjacency matrix to the backend
-    console.log(weightedGraph);
-    this.http.post('http://localhost:8080/signal-flow-graph', weightedGraph).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.transferFun = this.SignalService.sendToBackend(weightedGraph);
   }
 
   zoom(type: any){

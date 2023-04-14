@@ -13,6 +13,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {MatLegacyFormFieldModule} from "@angular/material/legacy-form-field";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatLegacyFormFieldModule,
+    MatExpansionModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]
