@@ -16,7 +16,6 @@
         <mat-panel-title>The C/CS Equation Formula</mat-panel-title>
         <mat-panel-description>
           Write down the coefficients of your equation
-
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -24,8 +23,7 @@
         <div *ngIf="construct">
           <div class="char-eq" *ngFor="let i of polynomial">
             <input type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
-            <label for="coefficient">S <sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; +
-                &nbsp;&nbsp;&nbsp;</span></label>
+            <label for="coefficient">S<sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
           </div>
         </div>
       </div>
@@ -41,7 +39,6 @@
         <mat-panel-title>Routh Table Result</mat-panel-title>
         <mat-panel-description>
           Here's the final routh-hurwitz table of this equation
-
         </mat-panel-description>
       </mat-expansion-panel-header>
 

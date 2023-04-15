@@ -3,17 +3,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #F5F5F5; /* color of the entire scrollbar track */
+  background-color: #efefef; /* color of the entire scrollbar track */
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #673ab7; /* color of the scrollbar thumb */
   border-radius: 10px; /* roundness of the scrollbar thumb */
-}
-
-/* For Firefox */
-scrollbar {
-  width: 10px; /* width of the entire scrollbar */
 }
 
 scrollbar-track {
@@ -130,7 +126,7 @@ hr{
 .char-eq{
   margin-top: 20px;
   display: inline-block;
-  vertical-align: middle !important;
+  line-break: none !important;
 }
 
 .char-eq label{
@@ -139,14 +135,9 @@ hr{
   font-size: large;
   font-weight: bold;
   color: #5c5c5c;
-  text-align: right;
+  text-align: right  !important;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 
 .char-eq input {
   width: 50px;
@@ -159,6 +150,12 @@ input::-webkit-inner-spin-button {
   border-radius: 7px;
   border: 1px solid #ccc;
   outline: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .char-eq input:is(:focus, :hover) {
