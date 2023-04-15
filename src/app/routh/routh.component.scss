@@ -1,3 +1,30 @@
+::-webkit-scrollbar {
+  width: 10px; /* width of the entire scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #F5F5F5; /* color of the entire scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #673ab7; /* color of the scrollbar thumb */
+  border-radius: 10px; /* roundness of the scrollbar thumb */
+}
+
+/* For Firefox */
+scrollbar {
+  width: 10px; /* width of the entire scrollbar */
+}
+
+scrollbar-track {
+  background-color: #F5F5F5; /* color of the entire scrollbar track */
+}
+
+scrollbar-thumb {
+  background-color: #673ab7; /* color of the scrollbar thumb */
+  border-radius: 10px; /* roundness of the scrollbar thumb */
+}
+
 form {
   font-family: 'Chivo Mono', monospace !important;
   width: 85%;
