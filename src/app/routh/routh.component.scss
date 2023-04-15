@@ -56,6 +56,10 @@ label {
   outline: none;
 }
 
+#degree:is(:focus, :hover) {
+  border: 1px solid #673ab7;
+}
+
 hr{
   width: 80% ; height: 1px;
   background: #CCC;
