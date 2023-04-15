@@ -1,14 +1,12 @@
 <app-nav-bar [navigation_dir]="'skip_previous'" [router_link]="'/signal-flow-graph'"
-             [tool_tip]="'Signal Flow Graph Workspace'" [comp]="'Table'"
-             [op1]="'delete'" [op2]="'delete'"
-             (opt1)="clearTable()" (opt2)="clearTable()"
-             [op1_tip]="'Clear the Table'" [op2_tip]="'Zoom out the graph'"></app-nav-bar>
+  [tool_tip]="'Signal Flow Graph Workspace'" [comp]="'Table'" [op1]="'delete'" [op2]="'delete'" (opt1)="clearTable()"
+  (opt2)="clearTable()" [op1_tip]="'Clear the Table'" [op2_tip]="'Zoom out the graph'"></app-nav-bar>
 
 <form>
-  <label for="degree" >Enter Degree of the C/CS Equation </label>
-  <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100" >
-  <button mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct"
-          type="submit" matTooltip="construct characteristic eq">
+  <label for="degree">Enter Degree of the C/CS Equation </label>
+  <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100">
+  <button mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct" type="submit"
+    matTooltip="construct characteristic eq">
     <mat-icon>done</mat-icon>
   </button>
 
@@ -18,7 +16,7 @@
         <mat-panel-title>The C/CS Equation Formula</mat-panel-title>
         <mat-panel-description>
           Write down the coefficients of your equation
-          <mat-icon>account_circle</mat-icon>
+
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -26,7 +24,8 @@
         <div *ngIf="construct">
           <div class="char-eq" *ngFor="let i of polynomial">
             <input type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
-            <label for="coefficient">S <sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
+            <label for="coefficient">S <sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; +
+                &nbsp;&nbsp;&nbsp;</span></label>
           </div>
         </div>
       </div>
@@ -42,7 +41,7 @@
         <mat-panel-title>Routh Table Result</mat-panel-title>
         <mat-panel-description>
           Here's the final routh-hurwitz table of this equation
-          <mat-icon>account_circle</mat-icon>
+
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -60,7 +59,7 @@
         <mat-panel-title>Stability Test</mat-panel-title>
         <mat-panel-description>
           Check your transfer function stability
-          <mat-icon>account_circle</mat-icon>
+
         </mat-panel-description>
       </mat-expansion-panel-header>
 
