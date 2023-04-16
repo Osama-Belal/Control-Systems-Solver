@@ -14,7 +14,7 @@ export class RouthComponent {
   coefficients: number[] = [];
   equation?: string;
   construct = false;
-  stability: boolean = true;
+  stability: boolean = false;
   rhpRoots?: number;
   routhTable: number[][] = []
 
@@ -22,6 +22,7 @@ export class RouthComponent {
 
   allowConstruction() {
     this.polynomial = [];
+    if(this.degree == undefined) return;
     this.construct = true;
     let i = this.degree;
     while (i)
@@ -36,7 +37,6 @@ export class RouthComponent {
       this.routhTable = data.routhSolution;
       this.stability = data.isStable;
       this.rhpRoots = data.rootCount;
-
     });
   }
 
@@ -48,7 +48,6 @@ export class RouthComponent {
     this.stability = true; 
     this.rhpRoots = 0;
     this.degree = 0;
-    
   }
   setStep(index: number) { this.step = index; }
   nextStep() { this.step++; }
