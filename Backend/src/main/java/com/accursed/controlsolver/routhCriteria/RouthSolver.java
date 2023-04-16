@@ -1,3 +1,5 @@
+package com.accursed.controlsolver.routhCriteria;
+
 import lombok.Setter;
 
 import java.util.ArrayList;
