@@ -200,11 +200,12 @@ input::-webkit-inner-spin-button {
 .routh-table{
   max-height: 300px;
   overflow: auto;
+  max-width: 95%;
 }
 
 
 table {
-  width: 100%;
+  width: 95%;
   border-collapse: collapse;
   margin: 0 auto;
   margin-top: 20px;
