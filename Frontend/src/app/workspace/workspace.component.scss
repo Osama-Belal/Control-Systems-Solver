@@ -1,0 +1,24 @@
+div{
+  width: 100%;
+  height: 100%;
+  background: #333;
+}
+
+#displayTransferFunction{
+  position: absolute;
+  color: #6b6b6b;
+  padding: 10px;
+  font-family: sans-serif;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #aaa;
+  z-index: 999;
+  background-color: #ffffff;
+  bottom: 1em ; left: 1em;
+  max-width: 80%;
+  height: 100px;
+}
+
+#displayTransferFunction h2{
+  margin: 0 !important;
+  padding: 10px;
+}

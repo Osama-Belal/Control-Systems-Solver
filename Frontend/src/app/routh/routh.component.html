@@ -1,0 +1,85 @@
+<app-nav-bar [navigation_dir]="'skip_previous'" [router_link]="'/signal-flow-graph'"
+  [tool_tip]="'Signal Flow Graph Workspace'" [comp]="'Table'" [op1]="'delete'" [op2]="'delete'" (opt1)="clearTable()"
+  (opt2)="clearTable()" [op1_tip]="'Clear the Table'" [op2_tip]="'Zoom out the graph'"></app-nav-bar>
+
+<form>
+  <label for="degree">Enter Degree of the C/CS Equation </label>
+  <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100">
+  <button  mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct" type="submit"
+    matTooltip="construct characteristic eq">
+    <mat-icon>done</mat-icon>
+  </button>
+
+  <mat-accordion class="polynomial">
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>The C/CS Equation Formula</mat-panel-title>
+        <mat-panel-description>
+          Write down the coefficients of your equation
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="polynomial" id="polynomial">
+        <div *ngIf="construct">
+          <div class="char-eq" *ngFor="let d of polynomial ; let index = index">
+            <!-- prepare coefficient array -->
+            <input [(ngModel)]="coefficients[index]" type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
+            <label for="coefficient">S<sup>{{d}}</sup><span *ngIf="d">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
+          </div>
+        </div>
+      </div>
+
+      <mat-action-row>
+        <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Routh Table Result</mat-panel-title>
+        <mat-panel-description>
+          Here's the final routh-hurwitz table of this equation
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+
+      <!--conent-->
+      <table class="routh-table" *ngIf="construct">
+        <tr *ngFor="let row of dummyArray ; let index = index" >
+          <td id="title">S<sup>{{dummyArray.length - index}}</sup></td> 
+          <td *ngFor="let col of row">
+             {{col}}
+          </td>
+        </tr>
+      </table>
+
+      <mat-action-row>
+        
+        <button mat-raised-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Stability Test</mat-panel-title>
+        <mat-panel-description>
+          Check your transfer function stability
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <!--conent-->
+      <p *ngIf="stability" id="stable" > This System is Stable </p>
+      <p *ngIf="!stability" id="unstable" > This System is Unstable and Has {{rhpRoots}} roots on the Right Half Plane</p>
+
+      <mat-action-row>
+        <button mat-raised-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</form>
