@@ -8,9 +8,9 @@ export class RouthService {
   private _url: string = "http://localhost:8080";
   constructor(private http: HttpClient) {}
 
-  sendToBackend(weightedGraph: any[]) {
+  sendToBackend(coefficients: any[]) {
     //send the adjacency matrix to the backend
-    console.log(weightedGraph);
-    return this.http.post(`${this._url}/routh`, weightedGraph);
+    console.log(coefficients);
+    return this.http.post(`${this._url}/routh`, coefficients);
   }
 }

@@ -13,7 +13,8 @@ import {Observable} from "rxjs";
 export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  transferFun!: Observable<Object>;
+  transferFun!: any;
+  isHidden: boolean = true;
   constructor(private renderer: Renderer2, private http: HttpClient, public SignalService: SignalGraphService) { }
 
   ngOnInit(): void {
@@ -327,6 +328,7 @@ export class WorkspaceComponent implements OnInit {
         weightedGraph[i][j] = 0;
       }
     }
+    
     this.graph.getLinks().forEach((link) => {
       let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
       let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
@@ -336,7 +338,6 @@ export class WorkspaceComponent implements OnInit {
       weightedGraph[sourceLabel][targetLabel] = link.prop('labels/0/attrs/text/text');
 
     });
-
 
     //print the adjacency matrix in formatted way
     let output = '[';
@@ -350,7 +351,11 @@ export class WorkspaceComponent implements OnInit {
     console.log(output);
     console.log(weightedGraph);
 
-    this.transferFun = this.SignalService.sendToBackend(weightedGraph);
+    this.isHidden = false;
+    this.SignalService.sendToBackend(weightedGraph).subscribe((data) => {
+      this.transferFun = data;
+    });
+    
   }
 
   zoom(type: any){

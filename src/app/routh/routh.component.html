@@ -5,7 +5,7 @@
 <form>
   <label for="degree">Enter Degree of the C/CS Equation </label>
   <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100">
-  <button mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct" type="submit"
+  <button  mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct" type="submit"
     matTooltip="construct characteristic eq">
     <mat-icon>done</mat-icon>
   </button>
@@ -21,9 +21,10 @@
 
       <div class="polynomial" id="polynomial">
         <div *ngIf="construct">
-          <div class="char-eq" *ngFor="let i of polynomial">
-            <input type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
-            <label for="coefficient">S<sup>{{i}}</sup><span *ngIf="i">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
+          <div class="char-eq" *ngFor="let d of polynomial ; let index = index">
+            <!-- prepare coefficient array -->
+            <input [(ngModel)]="coefficients[index]" type="number" id="coefficient" name="coefficient" min="-100" max="100" required>
+            <label for="coefficient">S<sup>{{d}}</sup><span *ngIf="d">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
           </div>
         </div>
       </div>
@@ -41,10 +42,20 @@
           Here's the final routh-hurwitz table of this equation
         </mat-panel-description>
       </mat-expansion-panel-header>
+      
 
       <!--conent-->
+      <table class="routh-table" *ngIf="construct">
+        <tr *ngFor="let row of dummyArray ; let index = index" >
+          <td id="title">S<sup>{{dummyArray.length - index}}</sup></td> 
+          <td *ngFor="let col of row">
+             {{col}}
+          </td>
+        </tr>
+      </table>
 
       <mat-action-row>
+        
         <button mat-raised-button color="warn" (click)="prevStep()">Previous</button>
         <button mat-raised-button color="primary" (click)="nextStep()">Next</button>
       </mat-action-row>
@@ -61,6 +72,8 @@
       </mat-expansion-panel-header>
 
       <!--conent-->
+      <p *ngIf="stability" id="stable" > This System is Stable </p>
+      <p *ngIf="!stability" id="unstable" > This System is Unstable and Has {{rhpRoots}} roots on the Right Half Plane</p>
 
       <mat-action-row>
         <button mat-raised-button color="warn" (click)="prevStep()">Previous</button>
