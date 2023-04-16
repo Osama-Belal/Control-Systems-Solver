@@ -28,6 +28,10 @@ scrollbar-thumb {
   /* roundness of the scrollbar thumb */
 }
 
+body{
+  font-family: 'Chivo Mono', monospace !important;
+}
+
 form {
   font-family: 'Chivo Mono', monospace !important;
   width: 85%;
@@ -108,16 +112,19 @@ hr {
 .polynomial .mat-expansion-panel-header-description {
   flex-basis: 0;
   color: #8d8d8d;
+  font-family: 'Chivo Mono', monospace !important;
 }
 
 .polynomial .mat-expansion-panel-header-description {
   justify-content: space-between;
   align-items: center;
+  font-family: 'Chivo Mono', monospace !important;
 }
 
 .polynomial .mat-expansion-panel-header-title {
   font-size: 15px;
   color: #5c5c5c;
+  font-family: 'Chivo Mono', monospace !important;
 }
 
 .inner-text {
