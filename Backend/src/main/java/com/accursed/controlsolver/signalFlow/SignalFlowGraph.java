@@ -1,4 +1,7 @@
 package com.accursed.controlsolver.signalFlow;
+import ch.qos.logback.core.joran.sanity.Pair;
+import sun.misc.Signal;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -6,28 +9,37 @@ import java.util.List;
 public class SignalFlowGraph
 {
     int size;
-    private List<pair> roads[];
+    private List<pair>[] roads;
     private List<List<Integer>> loops;
     private List<Double> loopsWeights;
-    private boolean loopsMatrix[][];
-    private Double loopMasks[];
-    public SignalFlowGraph(List<Point> pairs, List<Double> weights, int s)
-    {
-        this.size = s;
+    private boolean[][] loopsMatrix;
+    private Double[] loopMasks;
+    public SignalFlowGraph(double[][] graph){
+        this.size = graph.length;
         roads = new ArrayList[size];
         for (int i = 0; i < size; i++) roads[i] = new ArrayList<>();
         loops = new ArrayList();
         loopsWeights = new ArrayList<>();
 
-        for (int i = 0; i < pairs.size(); i++)
-        {
-            int x = pairs.get(i).x;
-            int y = pairs.get(i).y;
-            double weight = weights.get(i);
-            roads[x].add(new pair(y, weight));
-        }
-        this.getAllLoops();
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++)
+                if(graph[i][j] != 0)
+                    roads[i].add(new pair(j, graph[i][j]));
+        getAllLoops();
     }
+//    public SignalFlowGraph(List<Point> pairs, List<Double> weights, int s)
+//    {
+//        this.size = s;
+//
+//        for (int i = 0; i < pairs.size(); i++)
+//        {
+//            int x = pairs.get(i).x;
+//            int y = pairs.get(i).y;
+//            double weight = weights.get(i);
+//            roads[x].add(new pair(y, weight));
+//        }
+//        this.getAllLoops();
+//    }
 
     private void getAllLoops()
     {
