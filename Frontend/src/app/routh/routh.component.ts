@@ -40,7 +40,16 @@ export class RouthComponent {
     });
   }
 
-  clearTable() { this.polynomial = [] ; this.construct = false; this.coefficients = []; this.routhTable = []; this.stability = true; this.rhpRoots = 0;}
+  clearTable() { 
+    this.polynomial = [] ;
+    this.construct = false; 
+    this.coefficients = []; 
+    this.routhTable = []; 
+    this.stability = true; 
+    this.rhpRoots = 0;
+    this.degree = 0;
+    
+  }
   setStep(index: number) { this.step = index; }
   nextStep() { this.step++; }
   prevStep() { this.step--; }

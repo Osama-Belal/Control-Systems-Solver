@@ -185,6 +185,7 @@ hr {
   outline: none;
 }
 
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -194,6 +195,13 @@ input::-webkit-inner-spin-button {
 .char-eq input:is(:focus, :hover) {
   border: 1px solid #673ab7;
 }
+
+
+.routh-table{
+  max-height: 300px;
+  overflow: auto;
+}
+
 
 table {
   width: 100%;
