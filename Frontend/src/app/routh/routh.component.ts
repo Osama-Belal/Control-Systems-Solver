@@ -36,9 +36,16 @@ export class RouthComponent {
       this.polynomial.push(i--);
     this.polynomial.push(0);
     console.log(this.coefficients);
+  }
+
+  postToBackend(){
     this.routhService.sendToBackend(this.coefficients).subscribe((data) => {
-        // to be continued
-    });
+      // to be continued
+      console.log(data);
+      this.routhTable = data.routhSolution;
+      this.stability = data.isStable;
+      this.rhpRoots = data.rootCount;
+  });
   }
 
   clearTable() {this.polynomial = []}

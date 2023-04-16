@@ -11,6 +11,7 @@ public class RouthSolver {
     private double[][] routhTable;
     private int rowSize;
     private int maxPower;
+    private int rootCount;
     private static final double eps = 1e-10;
 
     public RouthSolver(List<Double> equation) {
@@ -25,14 +26,15 @@ public class RouthSolver {
             if(i%2==0) routhTable[0][i/2] = equation.get(i);
             else routhTable[1][i/2] = equation.get(i);
         }
+        rootCount = 0;
     }
-    private List<Double> solve(){
+    public RouthDTO solve(){
         for(int i=2;i<maxPower;i++){
             double val1 = routhTable[i-1][0];
             double val2 = routhTable[i-2][0];
             if(val1==0){
                 val1 = eps;
-                routhTable[i-1][0]=eps;
+                routhTable[i-1][0] = eps;
             }
             for(int j=0;j<rowSize-1;j++){
                 routhTable[i][j] = ((val1*routhTable[i-2][j+1]-val2*routhTable[i-1][j+1])/val1);
@@ -44,10 +46,14 @@ public class RouthSolver {
             out.set(i,routhTable[i][0]);
         }
         System.out.println(out);
-        return out;
+        boolean isStable = isStable(out);
+        RouthDTO routhDTO = new RouthDTO();
+        routhDTO.isStable = isStable;
+        routhDTO.routhSolution = routhTable;
+        routhDTO.rootCount = rootCount;
+        return routhDTO;
     }
-    public boolean isStable(){
-        List<Double> routhOut = solve();
+    private boolean isStable(List<Double> routhOut){
         boolean stable = true;
         int rootCount = 0;
         for(int i = 0;i<routhOut.size()-1;i++){
@@ -56,7 +62,7 @@ public class RouthSolver {
                 rootCount++;
             }
         }
-        System.out.println(rootCount);
+        this.rootCount = rootCount;
         return stable;
     }
     private void zeroRow(int row){
