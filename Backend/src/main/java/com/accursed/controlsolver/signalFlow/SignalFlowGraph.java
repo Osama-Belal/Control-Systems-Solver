@@ -140,7 +140,7 @@ public class SignalFlowGraph
                 if (loopsMatrix[i][lastone] == false)
                     flag = false;
             if (!flag) continue;
-            this.loopMasks[ii] = this.loopMasks[ii - (1 << lastone)] + this.loopsWeights.get(lastone);
+            this.loopMasks[ii] = this.loopMasks[ii - (1 << lastone)] * this.loopsWeights.get(lastone);
         }
     }
 
@@ -187,7 +187,7 @@ public class SignalFlowGraph
     double calculateDelta(boolean[] validLoops)
     {
         double ans = 1;
-        for (int ii = 0; ii < (1 << loops.size()); ii++)
+        for (int ii = 1; ii < (1 << loops.size()); ii++)
         {
             boolean flag = true;
             double count = 0;
