@@ -1,8 +1,5 @@
 package com.accursed.controlsolver.signalFlow;
-import ch.qos.logback.core.joran.sanity.Pair;
-import sun.misc.Signal;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -10,16 +7,25 @@ public class SignalFlowGraph
 {
     int size;
     private List<pair>[] roads;
-    private List<List<Integer>> loops;
+    public List<List<Integer>> loops;
     private List<Double> loopsWeights;
     private boolean[][] loopsMatrix;
     private Double[] loopMasks;
+    public List<List<String>> nonIntersectingLoopsEveryPath;
+    public List<String> paths;
+    public List<Double> deltasForEachPath;
+    public List<String> loopsForDeltaTotal;
+
     public SignalFlowGraph(double[][] graph){
         this.size = graph.length;
         roads = new ArrayList[size];
         for (int i = 0; i < size; i++) roads[i] = new ArrayList<>();
         loops = new ArrayList();
         loopsWeights = new ArrayList<>();
+        nonIntersectingLoopsEveryPath = new ArrayList<>();
+        paths = new ArrayList<>();
+        loopsForDeltaTotal = new ArrayList<>();
+        deltasForEachPath = new ArrayList<>();
 
         for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++)
@@ -46,12 +52,12 @@ public class SignalFlowGraph
         List<Integer> emptyList = new ArrayList<>();
 
         for (int i = 0; i < size; i++)
-            dfs1(i, 1, emptyList);
+            dfsLoop(i, 1, emptyList);
 
         getDoubleIntersectingMatrices();
         getDP();
     }
-    private void dfs1(int x, double gain, List<Integer> stack)
+    private void dfsLoop(int x, double gain, List<Integer> stack)
     {
         if (stack.size() > 0 && stack.get(0) == x)
         {
@@ -70,7 +76,7 @@ public class SignalFlowGraph
         stack.add(x);
 
         for (pair p : roads[x])
-            dfs1(p.first, gain * p.second, stack);
+            dfsLoop(p.first, gain * p.second, stack);
 
         stack.remove(stack.size() - 1);
     }
@@ -151,22 +157,28 @@ public class SignalFlowGraph
 
         for (double i = 0; i < size; i++)
             taken.add(false);
-        double ans = this.dfs2(0, 1, stack, taken) / this.calculateDeltaTotal();
+        double ans = this.dfsPath(0, 1, stack, taken) / this.calculateDeltaTotal();
+        int lastElementIndex = nonIntersectingLoopsEveryPath.size()-1;
+        this.loopsForDeltaTotal = this.nonIntersectingLoopsEveryPath.get(lastElementIndex);
+        this.nonIntersectingLoopsEveryPath.remove(lastElementIndex);
         return ans;
     }
-    double dfs2(Integer x, double gain, List<Integer> stack, List<Boolean> taken)
+    double dfsPath(Integer x, double gain, List<Integer> stack, List<Boolean> taken)
     {
         stack.add(x);
         taken.set(x, true);
         if (x == size - 1)
+        {
+            paths.add(getPathsString(stack));
             return gain * calculateDeltaForPath(stack);
+        }
 
         double ans = 0;
 
         for (pair p : roads[x])
         {
             if (taken.get(p.first)) continue;
-            ans += dfs2(p.first, gain * p.second, stack, taken);
+            ans += dfsPath(p.first, gain * p.second, stack, taken);
 
             stack.remove(stack.size() - 1);
             taken.set(p.first, false);
@@ -175,8 +187,10 @@ public class SignalFlowGraph
     }
     double calculateDeltaForPath(List<Integer> stack)
     {
-        boolean validLoops[] = getAllValidLoopsForPaths(stack);
-        return calculateDelta(validLoops);
+        boolean[] validLoops = getAllValidLoopsForPaths(stack);
+        double ans = calculateDelta(validLoops);
+        deltasForEachPath.add(ans);
+        return ans;
     }
     double calculateDeltaTotal()
     {
@@ -187,23 +201,27 @@ public class SignalFlowGraph
     double calculateDelta(boolean[] validLoops)
     {
         double ans = 1;
-        for (int ii = 1; ii < (1 << loops.size()); ii++)
+        List<String> currentLoops = new ArrayList<>();
+        for (int mask = 1; mask < (1 << loops.size()); mask++)
         {
             boolean flag = true;
             double count = 0;
             for (int i = 0; i < loops.size(); i++)
             {
                 int bit = (1 << i);
-                if ((ii & bit) == 0) continue;
+                if ((mask & bit) == 0) continue;
                 if (validLoops[i] == false) flag = false;
                 count++;
             }
             if (!flag) continue;
+
+            currentLoops.add((getNonIntersectingLoops(mask) + ", " + this.loopMasks[mask]));
             if (count % 2 == 0)
-                ans += this.loopMasks[ii];
+                ans += this.loopMasks[mask];
             else
-                ans -= this.loopMasks[ii];
+                ans -= this.loopMasks[mask];
         }
+        nonIntersectingLoopsEveryPath.add(currentLoops);
         return ans;
     }
     boolean[] getAllValidLoopsForPaths(List<Integer> stack)
@@ -222,6 +240,23 @@ public class SignalFlowGraph
             if (sett.contains(i) == true)
                 return false;
         return true;
+    }
+    private String getNonIntersectingLoops(int mask)
+    {
+        String ans = "";
+        for (int i = 0; i < loops.size(); i++) {
+            int bit = 1<<i;
+            if((bit & mask) != 0)
+                ans = ans.concat("L" + i +" ");
+        }
+        return ans;
+    }
+    private String getPathsString(List<Integer> stack)
+    {
+        String ans = "";
+        for(int i : stack)
+            ans = ans.concat("d" + i + " ");
+        return ans;
     }
     private class pair
     {
