@@ -1,6 +1,6 @@
 ::-webkit-scrollbar {
-  width: 10px;
   /* width of the entire scrollbar */
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -28,10 +28,6 @@ scrollbar-thumb {
   /* roundness of the scrollbar thumb */
 }
 
-body{
-  font-family: 'Chivo Mono', monospace !important;
-}
-
 form {
   font-family: 'Chivo Mono', monospace !important;
   width: 85%;
@@ -40,14 +36,11 @@ form {
   padding: 20px;
   border-radius: 9px;
   box-shadow: 0 0 3px #aaa;
-
 }
 
 label {
   display: inline-block;
-  margin-bottom: 4%;
-  margin-left: calc(19%);
-  margin-right: 20px;
+  margin:0 20px 6%;
   font-size: x-large;
   font-weight: bold;
   color: #5c5c5c;
@@ -56,11 +49,10 @@ label {
 #degree {
   width: 15%;
   font-size: large;
-  margin-top: 0px;
-  margin-right: 3% !important;
+  margin-top: 0;
+  margin-right: 3%;
   padding: 10px;
   color: #5c5c5c;
-  margin-right: 20px;
   border-radius: 9px;
   border: 1px solid #ccc;
   box-sizing: border-box;
@@ -89,13 +81,6 @@ label {
 
 #degree:is(:focus, :hover) {
   border: 1px solid #673ab7;
-}
-
-hr {
-  width: 80%;
-  height: 1px;
-  background: #CCC;
-  border: none;
 }
 
 .polynomial {
@@ -166,16 +151,7 @@ hr {
 .char-eq {
   margin-top: 20px;
   display: inline-block;
-  line-break: none !important;
-}
-
-.char-eq label {
-  display: inline-block;
-  margin-right: 0px;
-  font-size: large;
-  font-weight: bold;
-  color: #5c5c5c;
-  text-align: right !important;
+  line-break: unset !important;
 }
 
 
@@ -214,9 +190,7 @@ input::-webkit-inner-spin-button {
 table {
   width: 95%;
   border-collapse: collapse;
-  margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto;
   color: #000000;
   box-shadow: 0 0 3px #838383;
   border-radius: 5px;
@@ -261,7 +235,7 @@ td:nth-child(1) {
   background-color: rgba(0, 255, 68, 0.112);
   // height: 30px;
   text-align: center;
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0 10px 0;
   border-radius: 5px;
   box-shadow: 0 0 3px #aaa;
 }
@@ -271,7 +245,7 @@ td:nth-child(1) {
   font-size: large;
   color: rgb(252, 58, 58);
   background-color: rgba(255, 0, 0, 0.112);
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0 10px 0;
   border-radius: 5px;
   box-shadow: 0 0 3px #aaa;
 }

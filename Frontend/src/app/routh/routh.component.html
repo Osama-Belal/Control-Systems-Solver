@@ -1,11 +1,13 @@
 <app-nav-bar [navigation_dir]="'skip_previous'" [router_link]="'/signal-flow-graph'"
-  [tool_tip]="'Signal Flow Graph Workspace'" [comp]="'Table'" [op1]="'delete'"  (opt1)="clearTable()"
-  [op1_tip]="'Clear the Table'"></app-nav-bar>
+             (result)="postToBackend();setStep(1)" (node)="degree = degree ? degree + 1 : 1"
+             [tool_tip]="'Signal Flow Graph Workspace'" [newAction]="'Increase the degree'"
+             [comp]="'Table'" [op1]="'minimize'"  (opt1)="degree = degree ? degree - 1 : 0" [op1_tip]="'Decrease the degree'"
+             [op2]="'delete'"  (opt2)="clearTable()" [op2_tip]="'Clear the Table'"></app-nav-bar>
 
 <form>
   <label for="degree">Enter Degree of the C/CS Equation </label>
   <input required [(ngModel)]="degree" type="number" id="degree" name="degree" min="0" max="100">
-  <button mat-fab [color]="'accent'" (click)="allowConstruction()" id="construct" type="submit"
+  <button mat-fab [color]="'accent'" (click)="allowConstruction();setStep(0)" id="construct" type="submit"
     matTooltip="construct characteristic eq">
     <mat-icon>done</mat-icon>
   </button>
@@ -25,14 +27,13 @@
             <!-- prepare coefficient array -->
             <input [(ngModel)]="coefficients[index]" type="text" id="coefficient" name="coefficient" min="-100"
               max="100" required>
-            <label for="coefficient">S<sup>{{d}}</sup><span *ngIf="d">&nbsp;&nbsp;&nbsp; +
-                &nbsp;&nbsp;&nbsp;</span></label>
+            <label for="coefficient">S<sup>{{d}}</sup><span *ngIf="d">&nbsp;&nbsp;&nbsp; + &nbsp;&nbsp;&nbsp;</span></label>
           </div>
         </div>
       </div>
 
       <mat-action-row>
-        <button mat-raised-button color="primary" (click)="postToBackend()" (click)="nextStep()" >Next</button>
+        <button mat-raised-button color="primary" (click)="postToBackend();nextStep()">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
 
@@ -50,7 +51,7 @@
       <div class="routh-table">
         <table *ngIf="construct">
           <tr *ngFor="let row of routhTable ; let index = index">
-            <td id="title">S<sup>{{routhTable.length - index}}</sup></td>
+            <td id="title">S<sup>{{routhTable.length - index - 1}}</sup></td>
             <td *ngFor="let col of row">
               {{col}}
             </td>

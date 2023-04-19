@@ -10,6 +10,7 @@ export class NavBarComponent {
   @Input() router_link: any;
   @Input() tool_tip: any;
   @Input() comp: any;
+  @Input() newAction: any;
   @Input() op1: any;
   @Input() op1_tip: any;
   @Input() op2: any;
