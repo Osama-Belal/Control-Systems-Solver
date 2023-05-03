@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as joint from "jointjs";
 import {SignalGraphService} from "../Service/signal-graph.service";
-import {SignalFlowDTO} from "./SignalFlowDTO";
+import {SignalFlowDTO} from "./SignalFlowDTO"; 
 
 @Component({
   selector: 'app-workspace',
