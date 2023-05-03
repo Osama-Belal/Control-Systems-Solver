@@ -29,7 +29,7 @@ public class Controller {
         for(List<Integer> i : signalFlowGraph.loops){
             String temp = "";
             for(Integer j : i){
-                temp = temp.concat(Integer.toString(j));
+                temp = temp.concat(j + " ");
             }
             signalFlowDTO.loops.add(temp);
         }
