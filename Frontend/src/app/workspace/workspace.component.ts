@@ -1,9 +1,7 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as joint from "jointjs";
-import { HttpClient } from "@angular/common/http";
-import { toNumbers } from "@angular/compiler-cli/src/version_helpers";
 import {SignalGraphService} from "../Service/signal-graph.service";
-import {Observable} from "rxjs";
+import {SignalFlowDTO} from "./SignalFlowDTO";
 
 @Component({
   selector: 'app-workspace',
@@ -13,9 +11,10 @@ import {Observable} from "rxjs";
 export class WorkspaceComponent implements OnInit {
   private graph!: joint.dia.Graph;
   private paper!: joint.dia.Paper;
-  transferFun!: any;
+  GraphDTO!: any;
   isHidden: boolean = true;
-  constructor(private renderer: Renderer2, private http: HttpClient, public SignalService: SignalGraphService) { }
+  currentPath: string = ""
+  constructor(public SignalService: SignalGraphService) { }
 
   ngOnInit(): void {
 
@@ -37,7 +36,7 @@ export class WorkspaceComponent implements OnInit {
         color: '#ffffff'
       },
 
-      defaultLink: () => this.createLink("G(S)"),
+      defaultLink: () => this.createLink("20"),
       linkPinning: false,
 
       validateConnection: function (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
@@ -58,12 +57,6 @@ export class WorkspaceComponent implements OnInit {
       // Enable mark available for cells & magnets
       markAvailable: true,
     });
-    // this.paper.options.defaultConnector = {
-    //   name: 'rounded',
-    //   args: {
-    //     radius: 2000
-    //   }
-    // }
 
     //toolbox behaviour
     this.paper.on('cell:mouseenter', function (elementView) {
@@ -78,13 +71,6 @@ export class WorkspaceComponent implements OnInit {
     this.paper.on('cell:pointerdblclick', (elementView, e) => {
       const cell = elementView.model;
 
-      // const textarea = document.getElementById("text")!;
-      // this.renderer.setStyle(textarea, 'top', e.clientY+'px')
-      // this.renderer.setStyle(textarea, 'left', e.clientX+'px')
-      // textarea.style.display = 'block'
-      // textarea.textContent = 'labels/0/attrs/text/text';
-      // console.log(textarea.textContent)
-
       if (cell instanceof joint.shapes.standard.Link) {
         cell.prop('labels/0/attrs/text/text', prompt("Enter link label", cell.prop('labels/0/attrs/text/text')));
       }
@@ -94,11 +80,25 @@ export class WorkspaceComponent implements OnInit {
     });
 
     // static on initialization graph
-    const node_1 = this.createNode('R(S)');
-    const node_2 = this.createNode('C(S)');
-    const link = this.createLink('G(S)')
-    link.source(node_1)
-    link.target(node_2)
+    const node_1 = this.createNode('0');
+    const node_2 = this.createNode('1');
+    const node_3 = this.createNode('2');
+
+    const link1 = this.createLink('20')
+    const link2 = this.createLink('20')
+    const link3 = this.createLink('20')
+    const link4 = this.createLink('20')
+    const link5 = this.createLink('20')
+    link1.source(node_1)
+    link1.target(node_2)
+    link2.source(node_1)
+    link2.target(node_2)
+    link3.source(node_1)
+    link3.target(node_2)
+    link4.source(node_2)
+    link4.target(node_3)
+    link5.source(node_2)
+    link5.target(node_3)
   }
 
   createNode(label: any) {
@@ -163,46 +163,12 @@ export class WorkspaceComponent implements OnInit {
     });
 
     const removeButton = new joint.elementTools.Remove({ x: '50%' });
-
-    // var infoButton = new joint.elementTools.Button({
-    //   focusOpacity: 0.5,
-    //   // top-right corner
-    //   x: '100%',
-    //   y: '0%',
-    //   offset: { x: -5, y: -5 },
-    //   action: function(evt) {
-    //       alert('View id: ' + this.id + '\n' + 'Model id: ' );
-    //   },
-    //   markup: [{
-    //       tagName: 'circle',
-    //       selector: 'button',
-    //       attributes: {
-    //           'r': 7,
-    //           'fill': '#001DFF',
-    //           'cursor': 'pointer'
-    //       }
-    //   }, {
-    //       tagName: 'path',
-    //       selector: 'icon',
-    //       attributes: {
-    //           'd': 'M -2 4 2 4 M 0 3 0 0 M -2 -1 1 -1 M -1 -4 1 -4',
-    //           'fill': 'none',
-    //           'stroke': '#FFFFFF',
-    //           'stroke-width': 2,
-    //           'pointer-events': 'none'
-    //       }
-    //   }]
-    // });
-
-
-    const toolsview = new joint.dia.ToolsView({
+    return new joint.dia.ToolsView({
       tools: [
         boundaryTool,
         removeButton,
-        // infoButton
       ]
-    });
-    return toolsview
+    })
   }
 
   createLink(text: any) {
@@ -274,7 +240,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   createPort(text: any, pos: any) {
-    const port = {
+    return {
       id: 'custom-port-id', // set a custom ID
       position: {
         name: pos
@@ -307,9 +273,7 @@ export class WorkspaceComponent implements OnInit {
         selector: 'portBody'
       }]
     };
-    return port;
   }
-
 
   clearGraph() {
     this.graph.clear();
@@ -328,7 +292,7 @@ export class WorkspaceComponent implements OnInit {
         weightedGraph[i][j] = 0;
       }
     }
-    
+
     this.graph.getLinks().forEach((link) => {
       let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
       let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
@@ -350,17 +314,72 @@ export class WorkspaceComponent implements OnInit {
     output += ']';
     console.log(output);
     console.log(weightedGraph);
-
     this.isHidden = false;
-    this.SignalService.sendToBackend(weightedGraph).subscribe((data) => {
-      this.transferFun = data;
+
+    this.GraphDTO = new SignalFlowDTO()
+    this.GraphDTO.graph = weightedGraph
+    this.SignalService.sendToBackend(this.GraphDTO).subscribe((data) => {
+      this.GraphDTO = data
+      this.drawPaths()
     });
-    
   }
 
   zoom(type: any){
     type == '+' ? this.paper.scale(this.paper.scale().sx + 0.1, this.paper.scale().sy + 0.1):
                   this.paper.scale(this.paper.scale().sx - 0.1, this.paper.scale().sy - 0.1);
   }
+
+  async drawPaths() {
+    console.log(this.GraphDTO)
+    console.log(this.GraphDTO.paths)
+
+    for (let i = 0; i < this.GraphDTO.paths.length; i++) {
+      let links = []
+      this.currentPath = this.GraphDTO.paths[i]
+      const split_path = this.GraphDTO.paths[i].split(" ")
+
+      for (let j = 0; j < split_path.length - 1; j++) {
+        const src = split_path[j], target = split_path[j + 1]
+        for (const link of this.graph.getLinks()) {
+          let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
+          let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
+          if (sourceLabel === src && targetLabel === target)
+            links.push(link)
+        }
+      }
+      await recolorLinks(links)
+    }
+
+    // for(let i = 0;i < this.GraphDTO.loops.length;i++){
+    //   const split_loops = this.GraphDTO.loops[i].split(" ")
+    //   for(let j = 0;j < split_loops.length;j++){
+    //     const src = split_loops[j], target = split_loops[(j+1)%split_loops.length]
+    //     this.graph.getLinks().forEach((link) => {
+    //       let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
+    //       let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
+    //
+    //       if(sourceLabel === src && targetLabel === target) {
+    //         const originalColor = link.attr('line/stroke');
+    //         link.attr({'line': { stroke: 'orange', strokeWidth: 8 }});
+    //         setInterval(() => {link.attr({'line': { stroke: originalColor, strokeWidth: 2 }});}, 2000);
+    //       }
+    //     });
+    //   }
+    // }
+
+  }
 }
 
+function sleep(ms: any) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function recolorLinks(links: any[]) {
+  for (let i = 0; i < links.length; i++) {
+    const originalColor = links[i].attr('line/stroke');
+    links[i].attr({'line': {stroke: 'red', strokeWidth: 4}})
+    await sleep(1000);
+    // setInterval(() => {links[i].attr({'line': { stroke: originalColor, strokeWidth: 2 }});}, 1000);
+    links[i].attr({'line': { stroke: originalColor, strokeWidth: 2 }})
+  }
+}
