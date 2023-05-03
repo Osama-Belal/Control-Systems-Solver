@@ -255,7 +255,7 @@ public class SignalFlowGraph
     {
         String ans = "";
         for(int i : stack)
-            ans = ans.concat("d" + i + " ");
+            ans = ans.concat(i + " ");
         return ans;
     }
     private class pair
