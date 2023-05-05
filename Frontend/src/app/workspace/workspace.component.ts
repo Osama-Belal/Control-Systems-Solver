@@ -335,9 +335,8 @@ export class WorkspaceComponent implements OnInit {
 
     for (let i = 0; i < this.GraphDTO.paths.length; i++) {
       let links = []
-      this.currentPath = this.GraphDTO.paths[i]
+      this.currentPath = "Forward Path " +  [i + 1] + " is " + this.GraphDTO.paths[i]
       const split_path = this.GraphDTO.paths[i].split(" ")
-
       for (let j = 0; j < split_path.length - 1; j++) {
         const src = split_path[j], target = split_path[j + 1]
         for (const link of this.graph.getLinks()) {
@@ -350,6 +349,32 @@ export class WorkspaceComponent implements OnInit {
       await recolorLinks(links)
     }
 
+    for (let i = 0; i < this.GraphDTO.loops.length; i++) {
+      let links = []
+      this.currentPath = "Loop " +  [i + 1] + " is " + this.GraphDTO.loops[i]
+      let split_loops = this.GraphDTO.loops[i]
+      for (let j = 0; j < split_loops.length - 1; j++) {
+        let src = split_loops[j];
+        let target = " " ; 
+        if(split_loops.length <= 2){
+          target = src ;
+        }else{
+          target = split_loops[j + 2];
+        }
+        for (const link of this.graph.getLinks()) {
+          let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
+          let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
+          if (sourceLabel === src && targetLabel === target)
+            links.push(link)
+        }
+      }
+      await recolorLinks(links)
+    }
+
+    let p = document.getElementById("current-path");
+    p?.style.setProperty("font-weight", "bold");
+    this.currentPath = "Overall Transfer Function is " + this.GraphDTO.transferFunction
+
     // for(let i = 0;i < this.GraphDTO.loops.length;i++){
     //   const split_loops = this.GraphDTO.loops[i].split(" ")
     //   for(let j = 0;j < split_loops.length;j++){
@@ -357,7 +382,7 @@ export class WorkspaceComponent implements OnInit {
     //     this.graph.getLinks().forEach((link) => {
     //       let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
     //       let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
-    //
+    
     //       if(sourceLabel === src && targetLabel === target) {
     //         const originalColor = link.attr('line/stroke');
     //         link.attr({'line': { stroke: 'orange', strokeWidth: 8 }});
