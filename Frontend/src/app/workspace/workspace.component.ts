@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import * as joint from "jointjs";
 import {SignalGraphService} from "../Service/signal-graph.service";
-import {SignalFlowDTO} from "./SignalFlowDTO"; 
+import {SignalFlowDTO} from "./SignalFlowDTO";
+
 
 @Component({
   selector: 'app-workspace',
@@ -14,6 +15,7 @@ export class WorkspaceComponent implements OnInit {
   GraphDTO!: any;
   isHidden: boolean = true;
   currentPath: string = ""
+  currentShow: string = ""
   constructor(public SignalService: SignalGraphService) { }
 
   ngOnInit(): void {
@@ -72,10 +74,14 @@ export class WorkspaceComponent implements OnInit {
       const cell = elementView.model;
 
       if (cell instanceof joint.shapes.standard.Link) {
-        cell.prop('labels/0/attrs/text/text', prompt("Enter link label", cell.prop('labels/0/attrs/text/text')));
+        cell.prop('labels/0/attrs/text/text', prompt("Enter link " +
+          "label, \nNumbers only", cell.prop('labels/0/attrs/text/text')));
       }
       else if (cell instanceof joint.shapes.standard.Rectangle) {
-        cell.prop('attrs/label/text', prompt("Enter node label", cell.prop('attrs/label/text')));
+        cell.prop('attrs/label/text', prompt("Enter node name\nNote that you can name nodes whatever " +
+          "you want for visualizing the graph,\nHowever, when you submit the graph, all nodes must be labeled" +
+          " as numbers starting from 0, and ending at the largest node value, " +
+          "otherwise your graph won't be calculated", cell.prop('attrs/label/text')));
       }
     });
 
@@ -110,8 +116,8 @@ export class WorkspaceComponent implements OnInit {
         y: Math.random() * window.innerHeight / 2,
       },
       size: {
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
       },
       attrs: {
         body: {
@@ -122,7 +128,7 @@ export class WorkspaceComponent implements OnInit {
         },
         label: {
           text: label,
-          fill: '#133056',
+          fill: '#333',
           fontSize: 14,
           fontFamily: 'sans-serif',
         }
@@ -331,12 +337,15 @@ export class WorkspaceComponent implements OnInit {
 
   async drawPaths() {
     console.log(this.GraphDTO)
-    console.log(this.GraphDTO.paths)
 
+
+    this.currentShow = "Forward Paths"
+    console.log(this.GraphDTO.paths)
     for (let i = 0; i < this.GraphDTO.paths.length; i++) {
       let links = []
-      this.currentPath = "Forward Path " +  [i + 1] + " is " + this.GraphDTO.paths[i]
+      this.currentPath = this.GraphDTO.paths[i] + ", Δᵢ = " + this.GraphDTO.deltasForEachPath[i]
       const split_path = this.GraphDTO.paths[i].split(" ")
+
       for (let j = 0; j < split_path.length - 1; j++) {
         const src = split_path[j], target = split_path[j + 1]
         for (const link of this.graph.getLinks()) {
@@ -346,21 +355,20 @@ export class WorkspaceComponent implements OnInit {
             links.push(link)
         }
       }
-      await recolorLinks(links)
+      await recolorLinks(links, 'red')
     }
 
-    for (let i = 0; i < this.GraphDTO.loops.length; i++) {
+    this.currentShow = "Loops in graph"
+    console.log(this.GraphDTO.loops)
+    for(let i = 0;i < this.GraphDTO.loops.length;i++){
       let links = []
-      this.currentPath = "Loop " +  [i + 1] + " is " + this.GraphDTO.loops[i]
-      let split_loops = this.GraphDTO.loops[i]
-      for (let j = 0; j < split_loops.length - 1; j++) {
-        let src = split_loops[j];
-        let target = " " ; 
-        if(split_loops.length <= 2){
-          target = src ;
-        }else{
-          target = split_loops[j + 2];
-        }
+      const split_loops = this.GraphDTO.loops[i].split(" ")
+      split_loops[split_loops.length - 1] = split_loops[0]
+      console.log(split_loops)
+      this.currentPath = this.GraphDTO.loops[i] + ' ' + split_loops[0]
+
+      for(let j = 0;j < split_loops.length - 1;j++){
+        const src = split_loops[j], target = split_loops[j+1]
         for (const link of this.graph.getLinks()) {
           let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
           let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
@@ -368,29 +376,15 @@ export class WorkspaceComponent implements OnInit {
             links.push(link)
         }
       }
-      await recolorLinks(links)
+      await recolorLinks(links, 'orange')
     }
 
-    let p = document.getElementById("current-path");
-    p?.style.setProperty("font-weight", "bold");
-    this.currentPath = "Overall Transfer Function is " + this.GraphDTO.transferFunction
+    // TODO print every n non-touching loops
 
-    // for(let i = 0;i < this.GraphDTO.loops.length;i++){
-    //   const split_loops = this.GraphDTO.loops[i].split(" ")
-    //   for(let j = 0;j < split_loops.length;j++){
-    //     const src = split_loops[j], target = split_loops[(j+1)%split_loops.length]
-    //     this.graph.getLinks().forEach((link) => {
-    //       let sourceLabel = link.getSourceElement()?.prop('attrs/label/text');
-    //       let targetLabel = link.getTargetElement()?.prop('attrs/label/text');
-    
-    //       if(sourceLabel === src && targetLabel === target) {
-    //         const originalColor = link.attr('line/stroke');
-    //         link.attr({'line': { stroke: 'orange', strokeWidth: 8 }});
-    //         setInterval(() => {link.attr({'line': { stroke: originalColor, strokeWidth: 2 }});}, 2000);
-    //       }
-    //     });
-    //   }
-    // }
+    this.currentShow = "Result Transfer function"
+    this.currentPath = this.GraphDTO.transferFunction
+
+    setTimeout(() => {this.isHidden = true}, 2000)
 
   }
 }
@@ -399,10 +393,10 @@ function sleep(ms: any) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function recolorLinks(links: any[]) {
+async function recolorLinks(links: any[], color: any) {
   for (let i = 0; i < links.length; i++) {
     const originalColor = links[i].attr('line/stroke');
-    links[i].attr({'line': {stroke: 'red', strokeWidth: 4}})
+    links[i].attr({'line': {stroke: color, strokeWidth: 4}})
     await sleep(1000);
     // setInterval(() => {links[i].attr({'line': { stroke: originalColor, strokeWidth: 2 }});}, 1000);
     links[i].attr({'line': { stroke: originalColor, strokeWidth: 2 }})
