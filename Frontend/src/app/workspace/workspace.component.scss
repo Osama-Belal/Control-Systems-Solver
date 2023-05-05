@@ -7,14 +7,16 @@ div{
   position: absolute;
   color: #6b6b6b;
   //padding: 10px;
-  font-family: sans-serif;
+  font-family:  sans-serif;
   //border-radius: 10px;
   //box-shadow: 0 0 10px #aaa;
   z-index: 999;
-  background: rgba(65, 65, 65, 0.4);
+  background: rgba(116, 116, 116, 0.4);
   bottom: 1em ; left: calc(50% - 300px);
   max-width: 50%;
   height: 100px;
+  border-radius: 10px;
+
 }
 
 #displayTransferFunction h2,
@@ -26,5 +28,12 @@ div{
 #displayTransferFunction p{
   margin-top: .3em !important;
   font-size: 3em;
-  color: #333;
+  color: #232323;
+}
+
+#displayTransferFunction h2{
+  font-size: 1.7em;
+  color: #5b5b5b;
+  padding-top: 10px !important;
+
 }
