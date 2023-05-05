@@ -1,11 +1,10 @@
 
 <div [hidden]="isHidden" id="displayTransferFunction">
-  <h2>Calculated Transfer Function</h2>
-  <p id="current-path"> {{currentPath}} </p>
+  <h2>{{currentShow}}</h2>
+  <p> {{currentPath}} </p>
 </div>
-<div id="workspace"> 
 
-</div>
+<div id="workspace"></div>
 
 <app-nav-bar (node)="createNode($event)" (clear)="clearGraph()" (result)="createAdjacencyMatrix()"
              [navigation_dir]="'skip_next'" [router_link]="'/routh-herwitz'"
