@@ -20,8 +20,7 @@ export class NavBarComponent {
   @Output() opt1 = new EventEmitter();
   @Output() opt2 = new EventEmitter();
   @Output() result = new EventEmitter();
-
-  count = 0;
+  count = 3;
 
   add(){this.node.emit("" + this.count++);}
   option_1(){this.opt1.emit();this.count = 0;}

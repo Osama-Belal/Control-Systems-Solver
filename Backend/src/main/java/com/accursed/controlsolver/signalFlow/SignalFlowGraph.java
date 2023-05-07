@@ -188,8 +188,10 @@ public class SignalFlowGraph
     double calculateDeltaForPath(List<Integer> stack)
     {
         boolean[] validLoops = getAllValidLoopsForPaths(stack);
+
         double ans = calculateDelta(validLoops);
         deltasForEachPath.add(ans);
+
         return ans;
     }
     double calculateDeltaTotal()
@@ -215,7 +217,7 @@ public class SignalFlowGraph
             }
             if (!flag) continue;
 
-            currentLoops.add((getNonIntersectingLoops(mask) + ", " + this.loopMasks[mask]));
+            currentLoops.add(getNonIntersectingLoops(mask));
             if (count % 2 == 0)
                 ans += this.loopMasks[mask];
             else
@@ -246,9 +248,17 @@ public class SignalFlowGraph
         String ans = "";
         for (int i = 0; i < loops.size(); i++) {
             int bit = 1<<i;
-            if((bit & mask) != 0)
-                ans = ans.concat("L" + i +" ");
+            if((bit & mask) != 0){
+                for(int j : loops.get(i)){
+                    ans = ans.concat(j + " ");
+                }
+                ans = ans.concat(",");
+            }
+//                ans = ans.concat("L" + i +" ");
         }
+        if(ans.length() > 0)
+            ans = ans.substring(0, ans.length() - 1);
+
         return ans;
     }
     private String getPathsString(List<Integer> stack)

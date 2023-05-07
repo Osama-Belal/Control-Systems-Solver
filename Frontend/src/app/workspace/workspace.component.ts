@@ -344,6 +344,17 @@ export class WorkspaceComponent implements OnInit {
     for (let i = 0; i < this.GraphDTO.paths.length; i++) {
       let links = []
       this.currentPath = this.GraphDTO.paths[i] + ", Δᵢ = " + this.GraphDTO.deltasForEachPath[i]
+      // this.currentPath = "Δᵢ = " + this.GraphDTO.deltasForEachPath[i]
+      let nonIntersectingLoopsEveryPath = ""
+
+      this.GraphDTO.nonIntersectingLoopsEveryPath[i].forEach((loop: any) => {
+        nonIntersectingLoopsEveryPath += '(' + loop + ')'
+      })
+      console.log(nonIntersectingLoopsEveryPath)
+      if(nonIntersectingLoopsEveryPath.length > 0){
+        this.currentPath += "\nNon-touching loops = " + nonIntersectingLoopsEveryPath
+      }
+      
       const split_path = this.GraphDTO.paths[i].split(" ")
 
       for (let j = 0; j < split_path.length - 1; j++) {
@@ -355,7 +366,8 @@ export class WorkspaceComponent implements OnInit {
             links.push(link)
         }
       }
-      await recolorLinks(links, 'red')
+      
+      await recolorLinks(links, 'red', nonIntersectingLoopsEveryPath.length > 0)
     }
 
     this.currentShow = "Loops in graph"
@@ -393,11 +405,15 @@ function sleep(ms: any) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function recolorLinks(links: any[], color: any) {
+async function recolorLinks(links: any[], color: any, nonIntersectingCheck: boolean = false) {
   for (let i = 0; i < links.length; i++) {
     const originalColor = links[i].attr('line/stroke');
     links[i].attr({'line': {stroke: color, strokeWidth: 4}})
-    await sleep(1000);
+    if(nonIntersectingCheck){
+      await sleep(3000);  
+    }else{
+      await sleep(1000);  
+    }
     // setInterval(() => {links[i].attr({'line': { stroke: originalColor, strokeWidth: 2 }});}, 1000);
     links[i].attr({'line': { stroke: originalColor, strokeWidth: 2 }})
   }
