@@ -217,7 +217,7 @@ public class SignalFlowGraph
             }
             if (!flag) continue;
 
-            currentLoops.add((getNonIntersectingLoops(mask) + ", " + this.loopMasks[mask]));
+            currentLoops.add(getNonIntersectingLoops(mask));
             if (count % 2 == 0)
                 ans += this.loopMasks[mask];
             else
